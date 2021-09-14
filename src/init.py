@@ -1,0 +1,1 @@
+# -*- coding: utf-8 -*-import pandas as pdirradiance = pd.read_csv('../input/Irradiance_2015_UPOT.csv', sep=";", index_col="timestamp")print(irradiance)
