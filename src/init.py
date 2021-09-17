@@ -34,11 +34,11 @@ def calculate_dni(model, irradiance, solar_position):
     
 def display_error_functions(rmse, mbe, mae, rsqr):
     print('{} RMSE: {}, MBE: {}, MAE: {}, RSQR: {}'
-          .format(model.upper().ljust(8), 
-                  round(rmse, 2), 
-                  round(mbe, 2), 
-                  round(mae, 2),
-                  round(rsqr,3))) #increased decimal places for accuracy
+        .format(model.upper().ljust(8), 
+            round(rmse, 2), 
+            round(mbe, 2), 
+            round(mae, 2),
+            round(rsqr,3))) #increased decimal places for accuracy
 
 def check_NA_values(model, irradiance, solar_position, dni_calculated):
     #check for infinite
@@ -72,7 +72,7 @@ irradiance = irradiance[irradiance.index.isin(solar_position.index)]
 # Calculate the different DNI's
 for model in ['disc', 'dirint', 'dirindex','erbs']:
     dni_calculated = calculate_dni(model, irradiance, solar_position)
-    check_NA_values(model, irradiance, solar_position, dni_calculated)
+    #check_NA_values(model, irradiance, solar_position, dni_calculated)
     compare_dni(model, irradiance.DNI, dni_calculated)
     
 
