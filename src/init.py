@@ -68,6 +68,7 @@ def compare_dni(model, measured, calculated):
     #print can be modified based on need to debug
 
 # Get the irradiance and position of the sun
+#TODO: check if dataset exists in UTC timezone.
 irradiance = pd.read_csv('../input/Irradiance_2015_UPOT.csv', sep=";", index_col="timestamp", parse_dates=True)
 solar_position = pvlib.solarposition.ephemeris(irradiance.index, LATITUDE, LONGITUDE, temperature=irradiance.temp_air)
 
