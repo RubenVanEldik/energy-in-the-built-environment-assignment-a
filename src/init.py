@@ -65,8 +65,8 @@ def compare_dni(model, measured, calculated):
 irradiance = pd.read_csv('../input/Irradiance_2015_UPOT.csv', sep=";", index_col="timestamp", parse_dates=True)
 solar_position = pvlib.solarposition.ephemeris(irradiance.index, LATITUDE, LONGITUDE, temperature=irradiance.temp_air)
 
-# Remove all timestamps where the solar elevation is less than 3.655069828
-solar_position = solar_position[solar_position.elevation > 3.655069828]
+# Remove all timestamps where the solar elevation is less than 4
+solar_position = solar_position[solar_position.elevation > 4]
 irradiance = irradiance[irradiance.index.isin(solar_position.index)]
 
 # Calculate the different DNI's
