@@ -36,7 +36,7 @@ def calculate_dni(model, irradiance, solar_position):
         return pvlib.irradiance.erbs(ghi, zenith, time).dni
     raise Exception('Invalid GHI-DNI model type')
     
-def display_errorFunctions(rmse, mbe, mae, rsqr):
+def display_error_functions(rmse, mbe, mae, rsqr):
     print('{} RMSE: {}, MBE: {}, MAE: {}, RSQR: {}'
           .format(model.upper().ljust(8), 
                   round(rmse, 2), 
@@ -63,9 +63,7 @@ def compare_dni(model, measured, calculated):
     #rsqr = stats.linregress(measured, calculated) # r-squared eq. typ 1
     rsqr = 0; #r2_score(measured, calculated) # r-squared eq. typ 1
     
-    display_errorFunctions(rmse, mbe, mae, rsqr)
-    #print('{} RMSE: {}, MBE: {}, MAE: {}'.format(model.upper().ljust(8), round(rmse, 1), round(mbe, 1), round(mae, 1)))
-    #print can be modified based on need to debug
+    display_error_functions(rmse, mbe, mae, rsqr)
 
 # Get the irradiance and position of the sun
 #TODO: check if dataset exists in UTC timezone.
