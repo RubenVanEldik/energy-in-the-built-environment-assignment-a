@@ -3,11 +3,7 @@
 import pandas as pd
 import pvlib
 import numpy as np
-
-# R-sqr(coefficient of determination) regression score function
-#https://scikit-learn.org/stable/modules/generated/sklearn.metrics.r2_score.html 
-from sklearn.metrics import r2_score
-#from scipy import stat
+from scipy import stats
 
 # Define the location
 LATITUDE = 52.08746136865645
@@ -60,8 +56,7 @@ def compare_dni(model, measured, calculated):
     rmse = ((measured - calculated) ** 2).mean() ** 0.5
     mbe = (measured - calculated).mean()
     mae = abs(measured - calculated).mean()
-    #rsqr = stats.linregress(measured, calculated) # r-squared eq. typ 1
-    rsqr = 0; #r2_score(measured, calculated) # r-squared eq. typ 1
+    rsqr = stats.linregress(measured, calculated).rvalue ** 2
     
     display_error_functions(rmse, mbe, mae, rsqr)
 
@@ -74,7 +69,6 @@ solar_position = pvlib.solarposition.ephemeris(irradiance.index, LATITUDE, LONGI
 solar_position = solar_position[solar_position.elevation > 3.655069828]
 irradiance = irradiance[irradiance.index.isin(solar_position.index)]
 
-#for model in ['disc', 'dirint', 'dirindex', 'erbs']:
 # Calculate the different DNI's
 for model in ['disc', 'dirint', 'dirindex','erbs']:
     dni_calculated = calculate_dni(model, irradiance, solar_position)
