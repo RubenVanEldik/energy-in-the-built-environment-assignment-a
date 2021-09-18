@@ -32,14 +32,6 @@ def calculate_dni(model, irradiance, solar_position):
         return pvlib.irradiance.erbs(ghi, zenith, time).dni
     raise Exception('Invalid GHI-DNI model type')
     
-def display_error_functions(rmse, mbe, mae, rsqr):
-    print('{} RMSE: {}, MBE: {}, MAE: {}, RSQR: {}'
-        .format(model.upper().ljust(8), 
-            round(rmse, 2), 
-            round(mbe, 2), 
-            round(mae, 2),
-            round(rsqr,3))) #increased decimal places for accuracy
-
 def check_NA_values(model, irradiance, solar_position, dni_calculated):
     #check for infinite
     dni_calculated.replace([np.inf, -np.inf], np.nan, inplace=True)
@@ -65,6 +57,6 @@ for model in ['disc', 'dirint', 'dirindex','erbs']:
     dni_calculated = calculate_dni(model, irradiance, solar_position)
     #check_NA_values(model, irradiance, solar_position, dni_calculated)
     errors = utils.compare_series(irradiance.DNI, dni_calculated)
-    display_error_functions(errors['rmse'], errors['mbe'], errors['mae'], errors['rsqr'])
+    utils.print_object(errors, name=model, uppercase=True)
     
 
