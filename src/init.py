@@ -3,7 +3,7 @@
 import pandas as pd
 import pvlib
 import numpy as np
-from scipy import stats
+import utils
 
 # Define the location
 LATITUDE = 52.08746136865645
@@ -50,15 +50,6 @@ def check_NA_values(model, irradiance, solar_position, dni_calculated):
     #print(math.isinf(dni_calculated))
     #if dni_calculated.isna() == True:
         #print(dni_calculated.isna())
-        
-def compare_dni(model, measured, calculated):
-    """Print the RMSE, MBE, and MAE for two data series"""
-    rmse = ((measured - calculated) ** 2).mean() ** 0.5
-    mbe = (measured - calculated).mean()
-    mae = abs(measured - calculated).mean()
-    rsqr = stats.linregress(measured, calculated).rvalue ** 2
-    
-    display_error_functions(rmse, mbe, mae, rsqr)
 
 # Get the irradiance and position of the sun
 #TODO: check if dataset exists in UTC timezone.
@@ -73,6 +64,7 @@ irradiance = irradiance[irradiance.index.isin(solar_position.index)]
 for model in ['disc', 'dirint', 'dirindex','erbs']:
     dni_calculated = calculate_dni(model, irradiance, solar_position)
     #check_NA_values(model, irradiance, solar_position, dni_calculated)
-    compare_dni(model, irradiance.DNI, dni_calculated)
+    errors = utils.compare_series(irradiance.DNI, dni_calculated)
+    display_error_functions(errors['rmse'], errors['mbe'], errors['mae'], errors['rsqr'])
     
 
