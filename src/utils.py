@@ -14,6 +14,7 @@ def compare_series(series_a, series_b):
 def print_object(dict, *, name='', uppercase=False):
     string = name.ljust(10) if name != '' else ''
     for key in dict:
-        string += f'{key.upper() if uppercase else key}: {"" if dict[key] < 0 else " "}{float(dict[key]):.4}'.ljust(len(key) + 10)
+        string += f'{key.upper() if uppercase else key}: {"" if dict[key] < 0 else " "}{float(dict[key]):.4}'.ljust(
+            len(key) + 10)
 
     print(string)
