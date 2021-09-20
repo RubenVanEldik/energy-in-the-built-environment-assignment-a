@@ -16,7 +16,7 @@ def calculate_dni(model, irradiance, solar_position):
     time = irradiance.index
     ghi = irradiance.GHI
     zenith = solar_position['zenith']
-    apparant_zenith = solar_position['apparent_zenith']
+    apparent_zenith = solar_position['apparent_zenith']
 
     # Calculate and return the DNI for a specific type
     if model == 'disc':
@@ -25,13 +25,13 @@ def calculate_dni(model, irradiance, solar_position):
         return pvlib.irradiance.dirint(ghi, zenith, time)
     if model == 'dirindex':
         relative_airmass = pvlib.atmosphere.get_relative_airmass(
-            apparant_zenith)
+            apparent_zenith)
         absolute_airmass = pvlib.atmosphere.get_absolute_airmass(
             relative_airmass)
         linke_turbidity = pvlib.clearsky.lookup_linke_turbidity(
             time, LATITUDE, LONGITUDE)
         clearsky = pvlib.clearsky.ineichen(
-            apparant_zenith, absolute_airmass, linke_turbidity, perez_enhancement=True)
+            apparent_zenith, absolute_airmass, linke_turbidity, perez_enhancement=True)
         return pvlib.irradiance.dirindex(ghi, clearsky['ghi'], clearsky['dni'], zenith=zenith, times=time)
     if model == 'erbs':
         return pvlib.irradiance.erbs(ghi, zenith, time).dni
