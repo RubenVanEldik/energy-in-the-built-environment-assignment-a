@@ -59,6 +59,10 @@ def create_scatterplot(irradiance):
         subplot = axes[index // 2][index % 2]
         subplot.scatter(irradiance.DNI, irradiance['dni_' + model], s=0.0001)
         subplot.title.set_text(model.upper())
+        
+        # Add a trend line
+        subplot.plot([0, 1000], [0, 1000], color='black', linewidth=1)
+
     plt.savefig("../figures/part1/scatterplot.png", dpi=300)
 
 

@@ -1,2 +1,3 @@
 .DS_Store
 src/__pycache__/
+input/csvdata_KNMI_2019_hourly.csv
