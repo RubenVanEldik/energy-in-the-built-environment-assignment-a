@@ -38,18 +38,6 @@ def calculate_dni(model, irradiance, solar_position):
     raise Exception('Invalid GHI-DNI model type')
 
 
-def check_NA_values(model, irradiance, solar_position, dni_calculated):
-    # check for infinite
-    dni_calculated.replace([np.inf, -np.inf], np.nan, inplace=True)
-    na_vals = dni_calculated.isna()
-    # Dropping all the rows with nan values
-    dni_calculated.dropna(inplace=True)
-    print(na_vals.sum())
-    # print(math.isinf(dni_calculated))
-    # if dni_calculated.isna() == True:
-    # print(dni_calculated.isna())
-
-
 # Get the irradiance and position of the sun
 # TODO: check if dataset exists in UTC timezone.
 irradiance = pd.read_csv('../input/Irradiance_2015_UPOT.csv',
@@ -64,6 +52,5 @@ irradiance = irradiance[irradiance.index.isin(solar_position.index)]
 # Calculate the different DNI's
 for model in ['disc', 'dirint', 'dirindex', 'erbs']:
     dni_calculated = calculate_dni(model, irradiance, solar_position)
-    #check_NA_values(model, irradiance, solar_position, dni_calculated)
     errors = utils.compare_series(irradiance.DNI, dni_calculated)
     utils.print_object(errors, name=model, uppercase=True)
