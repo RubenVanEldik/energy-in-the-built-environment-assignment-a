@@ -11,7 +11,7 @@ Created on Tue Sep 21 14:06:46 2021
 
 import pandas as pd
 
-to_skip_lines = [*range(0, 10)]
+to_skip_lines = range(0, 10)
 
 
 data = pd.read_csv('../input/KNMI_2019_hourly.txt', skiprows=to_skip_lines)
@@ -35,7 +35,7 @@ data.wind = data.wind/10
 data.temp = data.temp/10
 
 #fix timezone UTC
-data.index = data.index.tz_localize('UTC');
+data.index = data.index.tz_localize('UTC')
 
 #export to new csv
 
