@@ -51,6 +51,6 @@ irradiance = irradiance[irradiance.index.isin(solar_position.index)]
 
 # Calculate the different DNI's
 for model in ['disc', 'dirint', 'dirindex', 'erbs']:
-    dni_calculated = calculate_dni(model, irradiance, solar_position)
-    errors = utils.compare_series(irradiance.DNI, dni_calculated)
+    irradiance['dni_' + model] = calculate_dni(model, irradiance, solar_position)
+    errors = utils.compare_series(irradiance.DNI, irradiance['dni_' + model])
     utils.print_object(errors, name=model, uppercase=True)
