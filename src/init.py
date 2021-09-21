@@ -2,12 +2,9 @@
 
 import pandas as pd
 import pvlib
-import numpy as np
 import matplotlib.pyplot as plt
 import utils
 
-# Increase the padding between subplots
-plt.subplots_adjust(wspace=0.4, hspace=0.4)
 
 # Define the location
 LATITUDE = 52.08746136865645
@@ -40,18 +37,48 @@ def calculate_dni(model, irradiance, solar_position):
     if model == 'erbs':
         return pvlib.irradiance.erbs(ghi, zenith, time).dni
     raise Exception('Invalid GHI-DNI model type')
+    
+def create_plot(rows, columns, *, xlabel, ylabel):
+    # Create a figure with subplots and set the correct spacing
+    figure, axes = plt.subplots(nrows=rows, ncols=columns, sharex=True, sharey = True)
+    figure.subplots_adjust(wspace=0.2, hspace=0.4)
+
+    # Set the axes label
+    for vertical_axe in axes: vertical_axe[0].set(ylabel=ylabel)
+    for horizontal_axe in axes[len(axes) - 1]: horizontal_axe.set(xlabel=xlabel)
+
+    # Return the created figure
+    return figure, axes
+
+
+def create_scatterplot(irradiance):
+    # Create a scatter plot of measured DNI vs the computed DNI
+    figure, axes = create_plot(2, 2, xlabel='Measured DNI', ylabel='Computed DNI')
+
+    for index, model in enumerate(MODELS):
+        subplot = axes[index // 2][index % 2]
+        subplot.scatter(irradiance.DNI, irradiance['dni_' + model], s=0.0001)
+        subplot.title.set_text(model.upper())
+    plt.savefig("../figures/part1/scatterplot.png", dpi=300)
+
 
 def create_histogram(irradiance):
+    # Create a histogram of the deviation
+    figure, axes = create_plot(2, 2, xlabel='Deviation', ylabel='Occurrances')
+
     for index, model in enumerate(MODELS):
+        subplot = axes[index // 2][index % 2]
+
         # Get the DNI error series
         dni_measured = irradiance.DNI
         dni_calculated = irradiance['dni_' + model]
         dni_error = dni_calculated - dni_measured
 
         # Create a subplot and set the model as title
-        plt.subplot(2, 2, index + 1)
-        ax = dni_error.plot(kind='hist', logy=True, bins=100)
-        ax.title.set_text(model)
+        subplot.hist(dni_error, log=True, bins=100)
+        subplot.title.set_text(model.upper())
+    plt.savefig("../figures/part1/histogram.png", dpi=300)
+
 
 # Get the irradiance and position of the sun
 # TODO: check if dataset exists in UTC timezone.
@@ -69,6 +96,7 @@ for model in MODELS:
     irradiance['dni_' + model] = calculate_dni(model, irradiance, solar_position)
     errors = utils.compare_series(irradiance.DNI, irradiance['dni_' + model])
     utils.print_object(errors, name=model, uppercase=True)
-    
 
+# Create the plots
+create_scatterplot(irradiance)
 create_histogram(irradiance)
