@@ -1,6 +1,9 @@
 # -*- coding: utf-8 -*-
 
+import pandas as pd
 from scipy import stats
+import pvlib
+
 
 def compare_series(series_a, series_b):
     """Return the RMSE, MBE, and MAE for two data series"""
@@ -11,6 +14,7 @@ def compare_series(series_a, series_b):
         'rsqr': stats.linregress(series_a, series_b).rvalue ** 2
     }
 
+
 def print_object(dict, *, name='', uppercase=False):
     string = name.ljust(10) if name != '' else ''
     for key in dict:
@@ -18,3 +22,20 @@ def print_object(dict, *, name='', uppercase=False):
             len(key) + 10)
 
     print(string)
+
+
+def get_irradiance(latitude, longitude):
+    # Return the irradiance and position of the sun
+    # TODO: check if dataset exists in UTC timezone.
+    irradiance = pd.read_csv('../input/Irradiance_2015_UPOT.csv',
+                             sep=";", index_col="timestamp", parse_dates=True)
+    solar_position = pvlib.solarposition.ephemeris(
+        irradiance.index, latitude, longitude, temperature=irradiance.temp_air)
+
+    for column in solar_position:
+        new_column_name = column if column.startswith(
+            'solar') else f'solar_{column}'
+        irradiance[new_column_name] = solar_position[column]
+
+    # Remove all timestamps where the solar elevation is less than 4
+    return irradiance[irradiance.solar_elevation > 4]
