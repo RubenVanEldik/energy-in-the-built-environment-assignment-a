@@ -4,9 +4,9 @@ import json
 import pandas as pd
 import pvlib
 from dataprep import get_knmi_data
-from init import calculate_dni
 
 buildings = json.load(open('../input/buildings.json', 'r'))
+from question1 import calculate_dni
 
 LATITUDE = 53.224
 LONGITUDE = 5.752
