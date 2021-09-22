@@ -1,43 +1,37 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-"""
-Created on Tue Sep 21 14:06:46 2021
 
-@author: rajesh, ruben, erik, kevan, marita
-"""
 #Preparing KNMI data for station:
 # STN         LON(east)   LAT(north)  ALT(m)      NAME
 # 270         5.752       53.224      1.20        Leeuwarden 
 
 import pandas as pd
 
-def getKNMIdata():
-    to_skip_lines = range(0, 10)
-    data = pd.read_csv('../input/KNMI_2019_hourly.txt', skiprows=to_skip_lines)
-    del data['# STN'] #delere station column
-    data.columns = ['date', 'HH', 'wind', 'temp', 'GHI']
-    #print(data)
+def get_knmi_data():
+    # Import the CSV file and set the column names
+    data = pd.read_csv('../input/KNMI_2019_hourly.txt', skiprows=range(0, 10))
+    data.columns = ['station', 'date', 'HH', 'wind', 'temp', 'GHI']
     
-    #fix date-time index
+    # Fix datetime index
     data.date = data.date.astype(str)
     data.HH = data.HH.apply( lambda x : str(x).zfill(2) )
     data.HH = data.HH.replace('24', '00')
     data['datetime'] = data.date + data.HH + '00'
     data['datetime'] = pd.to_datetime(data.datetime, format= '%Y%m%d%H%M')
     
+    # Set the datetime as index and keep only the wind, temperature, and GHI column
     data.index = data.datetime
     data = data[['wind', 'temp', 'GHI']]
     
-    #fix GHI units from GHI (j/cm2 to kw/m2) , temperature & wind (0.1 to 1)
-    data.GHI = data.GHI * 2.77778
-    data.wind = data.wind/10
-    data.temp = data.temp/10
+    # Fix the units
+    data.GHI = data.GHI * 2.77778 # J/cm2 to kW/m2
+    data.wind = data.wind / 10 # 0.1m/s to m/s
+    data.temp = data.temp / 10 # 0.1m/s to m/s
     
-    #fix timezone UTC
+    # Fix timezone UTC
     data.index = data.index.tz_localize('UTC')
     
-    #export to new csv
-    file_loc = '../input/csvdata_KNMI_2019_hourly.csv';
-    data.to_csv('../input/csvdata_KNMI_2019_hourly.csv', sep = ";")
-    return file_loc
-    #newdata = pd.read_csv('../input/csvdata_KNMI_2019_hourly.csv', sep = ";")
+    # Export to new csv
+    file_path = '../input/csvdata_KNMI_2019_hourly.csv';
+    data.to_csv(file_path, sep = ";")
+    return file_path
