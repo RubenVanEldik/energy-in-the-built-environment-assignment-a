@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 
-import pandas as pd
 import pvlib
 import matplotlib.pyplot as plt
 import utils
@@ -91,7 +90,7 @@ def create_histogram(irradiance):
 
 
 # Get the irradiance and position of the sun
-irradiance = utils.get_irradiance(LATITUDE, LONGITUDE)
+irradiance = utils.get_irradiance('../input/Irradiance_2015_UPOT.csv', latitude=LATITUDE, longitude=LONGITUDE, temp_col='temp_air')
 
 # Calculate the different DNI's
 for model in MODELS:

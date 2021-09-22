@@ -24,13 +24,13 @@ def print_object(dict, *, name='', uppercase=False):
     print(string)
 
 
-def get_irradiance(latitude, longitude):
+def get_irradiance(filename, *, latitude, longitude, index_col='timestamp', temp_col):
     # Return the irradiance and position of the sun
     # TODO: check if dataset exists in UTC timezone.
-    irradiance = pd.read_csv('../input/Irradiance_2015_UPOT.csv',
-                             sep=";", index_col="timestamp", parse_dates=True)
+    irradiance = pd.read_csv(filename,
+                             sep=";", index_col=index_col, parse_dates=True)
     solar_position = pvlib.solarposition.ephemeris(
-        irradiance.index, latitude, longitude, temperature=irradiance.temp_air)
+        irradiance.index, latitude, longitude, temperature=irradiance[temp_col])
 
     for column in solar_position:
         new_column_name = column if column.startswith(
