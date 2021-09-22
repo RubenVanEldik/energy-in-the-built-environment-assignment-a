@@ -20,12 +20,20 @@ irradiance = get_irradiance(filename, latitude=LATITUDE, longitude=LONGITUDE, in
 dirindex_dni = calculate_dni('dirindex', irradiance)
 dirindex_dhi = irradiance.GHI - dirindex_dni
 
-POA = pvlib.irradiance.get_total_irradiance(90, 225,
-                                            irradiance.solar_zenith, irradiance.solar_azimuth,
-                                            dirindex_dni, irradiance.GHI, dirindex_dhi, dni_extra=None, airmass=None,
-                                            albedo=0.25, surface_type=None, model='isotropic',
-                                            model_perez='allsitescomposite1990')
-poa_val = POA
+# Loop over all facades of all buildings and calculate the the irradiance for each hour
+for building in buildings:
+    for facade in buildings[building]['facades']:
+        # Define local variables for the get_total_irradiance function
+        tilt = facade['tilt']
+        azimuth = facade['azimuth']
+        zenith = irradiance.solar_zenith
+        azimuth = irradiance.solar_azimuth
+        dni = dirindex_dni
+        ghi = irradiance.GHI
+        dhi = dirindex_dhi
+        
+        facade['poa'] = pvlib.irradiance.get_total_irradiance(tilt, azimuth, zenith, azimuth, dni, ghi, dhi)
+
 # Calculating POA question 2.3
 # for building in buildings:
 # for facade in building:
