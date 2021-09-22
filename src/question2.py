@@ -1,59 +1,18 @@
 # -*- coding: utf-8 -*-
+
+import json
 import pandas as pd
 import pvlib
-import dataprep
+from dataprep import get_knmi_data
 from init import calculate_dni
-# Create 'table' with surface tilt and azimuth
 
-buildings = {
-    'House A': {
-        'facades' : [{
-                'tilt' : 90,
-                'azimuth' : 225
-            },
-            {
-                'tilt' : 90,
-                'azitmuth' : 135
-            }]
-        },
-    'House B': {
-        'facades' : [{
-                'tilt' : 90,
-                'azimuth' : 270
-            },
-            {
-                'tilt' : 90,
-                'azitmuth' : 180
-            },
-            {
-                'tilt' : 90,
-                'azitmuth' : 90
-            }]
-        },
-    'House C': {
-        'facades' : [{
-                'tilt' : 40,
-                'azimuth' : 180
-            }]
-            },
-    'House D': {
-        'facades' : [{
-                'tilt' : 40,
-                'azimuth' : 270
-            },
-            {
-                'tilt' : 40,
-                'azitmuth' : 90
-            }]
-        }
-        
-    }
+buildings = json.load(open('../input/buildings.json', 'r'))
 
 LATITUDE = 53.224
 LONGITUDE = 5.752
-file = dataprep.getKNMIdata()
 
-print(file);
+file = get_knmi_data()
+
 KNMIdata = pd.read_csv(file,
                          sep=";", index_col="datetime", parse_dates=True)
 
