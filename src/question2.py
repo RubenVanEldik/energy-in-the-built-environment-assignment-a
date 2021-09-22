@@ -2,9 +2,8 @@
 
 import json
 import pvlib
-from utils import get_irradiance
+import utils
 from dataprep import get_knmi_data
-from question1 import calculate_dni
 
 LATITUDE = 53.224
 LONGITUDE = 5.752
@@ -14,10 +13,10 @@ buildings = json.load(open('../input/buildings.json', 'r'))
 
 # Get the irradiance data from the KNMI data
 filename = get_knmi_data()
-irradiance = get_irradiance(filename, latitude=LATITUDE, longitude=LONGITUDE, index_col='datetime', temp_col='temp')
+irradiance = utils.get_irradiance(filename, latitude=LATITUDE, longitude=LONGITUDE, index_col='datetime', temp_col='temp')
 
 # Get the DNI and DHI
-dirindex_dni = calculate_dni('dirindex', irradiance)
+dirindex_dni = utils.calculate_dni('dirindex', irradiance, latitude=LATITUDE, longitude=LONGITUDE)
 dirindex_dhi = irradiance.GHI - dirindex_dni
 
 # Loop over all facades of all buildings and calculate the the irradiance for each hour

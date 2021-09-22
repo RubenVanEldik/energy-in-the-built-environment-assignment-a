@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 
-import pvlib
 import matplotlib.pyplot as plt
 import utils
 
@@ -9,43 +8,6 @@ import utils
 LATITUDE = 52.08746136865645
 LONGITUDE = 5.168080610130638
 MODELS = ['disc', 'dirint', 'dirindex', 'erbs']
-
-
-def calculate_dni(model, irradiance):
-    """
-    Calculate the DNI based on the model, irradiance, and solar position
-
-    Parameters:
-        model (string): The name of the model, has to be either 'disc', 'dirint', 'dirindex', or 'erbs'
-        irradiance (DataFrame): The latitude
-
-    Returns:
-        Series: The DNI series
-    """
-    # Define important variables
-    time = irradiance.index
-    ghi = irradiance.GHI
-    zenith = irradiance['solar_zenith']
-    apparent_zenith = irradiance['solar_apparent_zenith']
-
-    # Calculate and return the DNI for a specific type
-    if model == 'disc':
-        return pvlib.irradiance.disc(ghi, zenith, time).dni
-    if model == 'dirint':
-        return pvlib.irradiance.dirint(ghi, zenith, time)
-    if model == 'dirindex':
-        relative_airmass = pvlib.atmosphere.get_relative_airmass(
-            apparent_zenith)
-        absolute_airmass = pvlib.atmosphere.get_absolute_airmass(
-            relative_airmass)
-        linke_turbidity = pvlib.clearsky.lookup_linke_turbidity(
-            time, LATITUDE, LONGITUDE)
-        clearsky = pvlib.clearsky.ineichen(
-            apparent_zenith, absolute_airmass, linke_turbidity, perez_enhancement=True)
-        return pvlib.irradiance.dirindex(ghi, clearsky['ghi'], clearsky['dni'], zenith=zenith, times=time)
-    if model == 'erbs':
-        return pvlib.irradiance.erbs(ghi, zenith, time).dni
-    raise Exception('Invalid GHI-DNI model type')
 
 
 def create_plot(rows, columns, *, xlabel, ylabel):
@@ -132,7 +94,7 @@ irradiance = utils.get_irradiance('../input/Irradiance_2015_UPOT.csv', latitude=
 
 # Calculate the different DNI's
 for model in MODELS:
-    irradiance['dni_' + model] = calculate_dni(model, irradiance)
+    irradiance['dni_' + model] = utils.calculate_dni(model, irradiance, latitude=LATITUDE, longitude=LONGITUDE)
     errors = utils.compare_series(irradiance.DNI, irradiance['dni_' + model])
     utils.print_object(errors, name=model, uppercase=True)
 

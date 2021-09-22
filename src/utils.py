@@ -71,3 +71,40 @@ def get_irradiance(filename, *, latitude, longitude, index_col='timestamp', temp
 
     # Remove all timestamps where the solar elevation is less than 4
     return irradiance[irradiance.solar_elevation > 4]
+
+
+def calculate_dni(model, irradiance, *, latitude, longitude):
+    """
+    Calculate the DNI based on the model, irradiance, and solar position
+
+    Parameters:
+        model (string): The name of the model, has to be either 'disc', 'dirint', 'dirindex', or 'erbs'
+        irradiance (DataFrame): The latitude
+
+    Returns:
+        Series: The DNI series
+    """
+    # Define important variables
+    time = irradiance.index
+    ghi = irradiance.GHI
+    zenith = irradiance['solar_zenith']
+    apparent_zenith = irradiance['solar_apparent_zenith']
+
+    # Calculate and return the DNI for a specific type
+    if model == 'disc':
+        return pvlib.irradiance.disc(ghi, zenith, time).dni
+    if model == 'dirint':
+        return pvlib.irradiance.dirint(ghi, zenith, time)
+    if model == 'dirindex':
+        relative_airmass = pvlib.atmosphere.get_relative_airmass(
+            apparent_zenith)
+        absolute_airmass = pvlib.atmosphere.get_absolute_airmass(
+            relative_airmass)
+        linke_turbidity = pvlib.clearsky.lookup_linke_turbidity(
+            time, latitude, longitude)
+        clearsky = pvlib.clearsky.ineichen(
+            apparent_zenith, absolute_airmass, linke_turbidity, perez_enhancement=True)
+        return pvlib.irradiance.dirindex(ghi, clearsky['ghi'], clearsky['dni'], zenith=zenith, times=time)
+    if model == 'erbs':
+        return pvlib.irradiance.erbs(ghi, zenith, time).dni
+    raise Exception('Invalid GHI-DNI model type')
