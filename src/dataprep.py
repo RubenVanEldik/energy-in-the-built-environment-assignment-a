@@ -9,7 +9,7 @@ import pandas as pd
 
 def get_knmi_data():
     # Import the CSV file and set the column names
-    data = pd.read_csv('../input/KNMI_2019_hourly.txt', skiprows=range(0, 10))
+    data = pd.read_csv('../input/knmi_raw.csv', skiprows=range(0, 10))
     data.columns = ['station', 'date', 'HH', 'wind', 'temp', 'GHI']
     
     # Fix datetime index
@@ -32,6 +32,6 @@ def get_knmi_data():
     data.index = data.index.tz_localize('UTC')
     
     # Export to new csv
-    file_path = '../input/csvdata_KNMI_2019_hourly.csv';
+    file_path = '../input/knmi_processed.csv';
     data.to_csv(file_path, sep = ";")
     return file_path
