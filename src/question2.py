@@ -1,35 +1,31 @@
 # -*- coding: utf-8 -*-
 
 import json
-import pandas as pd
 import pvlib
+from utils import get_irradiance
 from dataprep import get_knmi_data
-
-buildings = json.load(open('../input/buildings.json', 'r'))
 from question1 import calculate_dni
 
 LATITUDE = 53.224
 LONGITUDE = 5.752
 
-file = get_knmi_data()
+# Get the building info
+buildings = json.load(open('../input/buildings.json', 'r'))
 
-KNMIdata = pd.read_csv(file,
-                       sep=";", index_col="datetime", parse_dates=True)
+# Get the irradiance data from the KNMI data
+filename = get_knmi_data()
+irradiance = get_irradiance(filename, latitude=LATITUDE, longitude=LONGITUDE, index_col='datetime', temp_col='temp')
 
-solar_position = pvlib.solarposition.ephemeris(
-    KNMIdata.index, LATITUDE, LONGITUDE, temperature=KNMIdata.temp)
-
-dirindex_dni = calculate_dni('dirindex', KNMIdata, solar_position)
-
-dirindex_dhi = KNMIdata['GHI'] - dirindex_dni
+# Get the DNI and DHI
+dirindex_dni = calculate_dni('dirindex', irradiance)
+dirindex_dhi = irradiance.GHI - dirindex_dni
 
 POA = pvlib.irradiance.get_total_irradiance(90, 225,
-                                            solar_position['zenith'], solar_position['azimuth'],
-                                            dirindex_dni, KNMIdata['GHI'], dirindex_dhi, dni_extra=None, airmass=None,
+                                            irradiance.solar_zenith, irradiance.solar_azimuth,
+                                            dirindex_dni, irradiance.GHI, dirindex_dhi, dni_extra=None, airmass=None,
                                             albedo=0.25, surface_type=None, model='isotropic',
                                             model_perez='allsitescomposite1990')
 poa_val = POA
-print(POA)
 # Calculating POA question 2.3
 # for building in buildings:
 # for facade in building:
