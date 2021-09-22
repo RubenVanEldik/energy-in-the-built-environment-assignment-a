@@ -3,7 +3,6 @@
 import json
 import pvlib
 import utils
-from dataprep import get_knmi_data
 
 LATITUDE = 53.224
 LONGITUDE = 5.752
@@ -12,7 +11,7 @@ LONGITUDE = 5.752
 buildings = json.load(open('../input/buildings.json', 'r'))
 
 # Get the irradiance data from the KNMI data
-filename = get_knmi_data()
+filename = utils.get_knmi_data()
 irradiance = utils.get_irradiance(filename, latitude=LATITUDE, longitude=LONGITUDE, index_col='datetime', temp_col='temp')
 
 # Get the DNI and DHI
