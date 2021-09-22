@@ -9,6 +9,12 @@ import pandas as pd
 
 
 def get_knmi_data():
+    """
+    Get and transform the KNMI dataset
+
+    Returns:
+        str: File path of the processed CSV data file
+    """
     # Import the CSV file and set the column names
     data = pd.read_csv('../input/knmi_raw.csv', skiprows=range(0, 10))
     data.columns = ['station', 'date', 'HH', 'wind', 'temp', 'GHI']

@@ -12,7 +12,16 @@ MODELS = ['disc', 'dirint', 'dirindex', 'erbs']
 
 
 def calculate_dni(model, irradiance):
-    """Return a DNI series based on the model, irradiance, and solar position"""
+    """
+    Calculate the DNI based on the model, irradiance, and solar position
+
+    Parameters:
+        model (string): The name of the model, has to be either 'disc', 'dirint', 'dirindex', or 'erbs'
+        irradiance (DataFrame): The latitude
+
+    Returns:
+        Series: The DNI series
+    """
     # Define important variables
     time = irradiance.index
     ghi = irradiance.GHI
@@ -40,6 +49,19 @@ def calculate_dni(model, irradiance):
 
 
 def create_plot(rows, columns, *, xlabel, ylabel):
+    """
+    Create a plot with rows x columns subplots and labels on the outer axes
+
+    Parameters:
+        rows (int): Number of rows
+        columns (int): Number of columns
+        xlabel (str): Label for the x-axis
+        ylabel (str): Label for the y-axis
+
+    Returns:
+        figure: Created figure
+        axes: Created axes
+    """
     # Create a figure with subplots and set the correct spacing
     figure, axes = plt.subplots(
         nrows=rows, ncols=columns, sharex=True, sharey=True)
@@ -56,7 +78,15 @@ def create_plot(rows, columns, *, xlabel, ylabel):
 
 
 def create_scatterplot(irradiance):
-    # Create a scatter plot of measured DNI vs the computed DNI
+    """
+    Create a scatter plot of measured DNI vs the computed DNI
+
+    Parameters:
+        irradiance (DataFrame): DataFrame with the irradiance
+
+    Returns:
+        null
+    """
     figure, axes = create_plot(
         2, 2, xlabel='Measured DNI', ylabel='Computed DNI')
 
@@ -72,7 +102,15 @@ def create_scatterplot(irradiance):
 
 
 def create_histogram(irradiance):
-    # Create a histogram of the deviation
+    """
+    Create a histogram of the deviation
+
+    Parameters:
+        irradiance (DataFrame): DataFrame with the irradiance
+
+    Returns:
+        null
+    """
     figure, axes = create_plot(2, 2, xlabel='Deviation', ylabel='Occurrances')
 
     for index, model in enumerate(MODELS):

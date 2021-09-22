@@ -6,7 +6,16 @@ import pvlib
 
 
 def compare_series(series_a, series_b):
-    """Return the RMSE, MBE, and MAE for two data series"""
+    """
+    Calculate the RMSE, MBE, and MAE for two data series
+
+    Parameters:
+        series_a (Series): First pandas series
+        series_b (Series): Second pandas series
+
+    Returns:
+        obj: Object with the 'rmse', 'mbe', 'mae', 'rsqr' values
+    """
     return {
         'rmse': ((series_a - series_b) ** 2).mean() ** 0.5,
         'mbe': (series_a - series_b).mean(),
@@ -16,6 +25,17 @@ def compare_series(series_a, series_b):
 
 
 def print_object(dict, *, name='', uppercase=False):
+    """
+    Print the values of an object nicely on a single line
+
+    Parameters:
+        dict (dict): Dictionary that should be printed
+        name (string): Name that should appear before the first key/value of the dictionary
+        uppercase (bool): Whether or not the keys should be printed in capital letters
+
+    Returns:
+        null
+    """
     string = name.ljust(10) if name != '' else ''
     for key in dict:
         string += f'{key.upper() if uppercase else key}: {"" if dict[key] < 0 else " "}{float(dict[key]):.4}'.ljust(
@@ -25,7 +45,19 @@ def print_object(dict, *, name='', uppercase=False):
 
 
 def get_irradiance(filename, *, latitude, longitude, index_col='timestamp', temp_col):
-    # Return the irradiance and position of the sun
+    """
+    Get the irradiance and position of the sun and merge this with the original DataFrame
+
+    Parameters:
+        filename (string): Name of the CSV file with the irradiance data
+        latitude (float): Latitude
+        longitude (float): Longitude
+        index_col (string): Name of the column that should be used as index (default is timestamp)
+        temp_col (string): Name of the column with the temperature 
+
+    Returns:
+        DataFrame: A concatenated DataFrame of the input file with the solar info, the solar info columns start with 'solar_'
+    """
     # TODO: check if dataset exists in UTC timezone.
     irradiance = pd.read_csv(filename,
                              sep=";", index_col=index_col, parse_dates=True)

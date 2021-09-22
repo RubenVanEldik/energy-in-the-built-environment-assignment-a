@@ -32,7 +32,9 @@ for building in buildings:
         ghi = irradiance.GHI
         dhi = dirindex_dhi
         
-        facade['poa'] = pvlib.irradiance.get_total_irradiance(tilt, azimuth, zenith, azimuth, dni, ghi, dhi)
+        poa = pvlib.irradiance.get_total_irradiance(tilt, azimuth, zenith, azimuth, dni, ghi, dhi)
+        global2 = poa.poa_global.sum() / 1000
+        facade['poa'] = global2
 
 # Calculating POA question 2.3
 # for building in buildings:
