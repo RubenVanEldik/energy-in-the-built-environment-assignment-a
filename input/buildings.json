@@ -7,7 +7,7 @@
       },
       {
         "tilt":90,
-        "azitmuth":135
+        "azimuth":135
       }
     ]
   },
@@ -19,11 +19,11 @@
       },
       {
         "tilt":90,
-        "azitmuth":180
+        "azimuth":180
       },
       {
         "tilt":90,
-        "azitmuth":90
+        "azimuth":90
       }
     ]
   },
@@ -43,7 +43,7 @@
       },
       {
         "tilt":40,
-        "azitmuth":90
+        "azimuth":90
       }
     ]
   }
