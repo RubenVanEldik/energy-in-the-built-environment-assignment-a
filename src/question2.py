@@ -32,13 +32,13 @@ def calculate_poa(tilt, azimuth, irradiance):
         obj: Object with total, diffuse, and direct irradiance data
     """
     # Define local variables for the get_total_irradiance function
-    zenith = irradiance.solar_zenith
-    azimuth = irradiance.solar_azimuth
+    solar_zenith = irradiance.solar_zenith
+    solar_azimuth = irradiance.solar_azimuth
     dni = irradiance.DNI
     ghi = irradiance.GHI
     dhi = irradiance.DHI
     
-    poa = pvlib.irradiance.get_total_irradiance(tilt, azimuth, zenith, azimuth, dni, ghi, dhi)
+    poa = pvlib.irradiance.get_total_irradiance(tilt, azimuth, solar_zenith, solar_azimuth, dni, ghi, dhi)
     return {
         'total': poa.poa_global.sum() / 1000,
         'diffuse': poa.poa_diffuse.sum() / 1000,
