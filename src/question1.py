@@ -50,7 +50,7 @@ def create_scatterplot(irradiance):
         null
     """
     figure, axes = create_plot(
-        2, 2, xlabel='Measured DNI', ylabel='Computed DNI')
+        2, 2, xlabel='Measured DNI [$W/m^2$]', ylabel='Computed DNI [$W/m^2$]')
 
     for index, model in enumerate(MODELS):
         subplot = axes[index // 2][index % 2]
@@ -73,7 +73,7 @@ def create_histogram(irradiance):
     Returns:
         null
     """
-    figure, axes = create_plot(2, 2, xlabel='Deviation', ylabel='Occurrances')
+    figure, axes = create_plot(2, 2, xlabel='DNI error [$W/m^2$]', ylabel='Occurrances [#]')
 
     for index, model in enumerate(MODELS):
         subplot = axes[index // 2][index % 2]
