@@ -1,0 +1,50 @@
+{
+  "House A":{
+    "facades":[
+      {
+        "tilt":90,
+        "azimuth":225
+      },
+      {
+        "tilt":90,
+        "azimuth":135
+      }
+    ]
+  },
+  "House B":{
+    "facades":[
+      {
+        "tilt":90,
+        "azimuth":270
+      },
+      {
+        "tilt":90,
+        "azimuth":180
+      },
+      {
+        "tilt":90,
+        "azimuth":90
+      }
+    ]
+  },
+  "House C":{
+    "facades":[
+      {
+        "tilt":40,
+        "azimuth":180
+      }
+    ]
+  },
+  "House D":{
+    "facades":[
+      {
+        "tilt":40,
+        "azimuth":270
+      },
+      {
+        "tilt":40,
+        "azimuth":90
+      }
+    ]
+  }
+}
