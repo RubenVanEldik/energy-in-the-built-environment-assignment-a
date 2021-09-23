@@ -1,50 +1,50 @@
 {
-  "House A":{
-    "facades":[
-      {
-        "tilt":90,
-        "azimuth":225
+  "House A": {
+    "facades": {
+      "Façade SE": {
+        "tilt": 90,
+        "azimuth": 135
       },
-      {
-        "tilt":90,
-        "azimuth":135
+      "Façade SW": {
+        "tilt": 90,
+        "azimuth": 225
       }
-    ]
+    }
   },
-  "House B":{
-    "facades":[
-      {
-        "tilt":90,
-        "azimuth":270
+  "House B": {
+    "facades": {
+      "Façade W": {
+        "tilt": 90,
+        "azimuth": 270
       },
-      {
-        "tilt":90,
-        "azimuth":180
+      "Façade S": {
+        "tilt": 90,
+        "azimuth": 180
       },
-      {
-        "tilt":90,
-        "azimuth":90
+      "Façade E": {
+        "tilt": 90,
+        "azimuth": 90
       }
-    ]
+    }
   },
-  "House C":{
-    "facades":[
-      {
-        "tilt":40,
-        "azimuth":180
+  "House C": {
+    "facades": {
+      "Rooftop S": {
+        "tilt": 40,
+        "azimuth": 180
       }
-    ]
+    }
   },
-  "House D":{
-    "facades":[
-      {
-        "tilt":40,
-        "azimuth":270
+  "House D": {
+    "facades": {
+      "Rooftop W": {
+        "tilt": 40,
+        "azimuth": 270
       },
-      {
-        "tilt":40,
-        "azimuth":90
+      "Rooftop E": {
+        "tilt": 40,
+        "azimuth": 90
       }
-    ]
+    }
   }
 }
