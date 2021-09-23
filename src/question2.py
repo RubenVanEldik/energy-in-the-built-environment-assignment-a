@@ -2,7 +2,6 @@
 
 import json
 import pandas as pd
-import matplotlib.pyplot as plt
 import pvlib
 import utils
 
@@ -87,7 +86,7 @@ def find_best_orientation(irradiance, *, azimuths, tilts=range(10, 45, 5), plotn
     # Create and save the bar chart
     fig = all_orientations.plot(kind='bar', xlabel='Tilt [deg]', ylabel='Total irradiance [kWh/m2 year]')
     fig.legend(title='Azimuth [deg]', loc=4)
-    plt.savefig(f'../figures/question2/{plotname}.png', dpi=300)
+    utils.savefig(f'../figures/question2/{plotname}.png')
 
     # Find and return the optimal azimuth and tilt in the DataFrame
     optimal_azimuth = all_orientations.max().idxmax()

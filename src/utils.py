@@ -2,6 +2,7 @@
 
 import pandas as pd
 from scipy import stats
+import matplotlib.pyplot as plt
 import pvlib
 
 
@@ -42,6 +43,16 @@ def print_object(dict, *, name='', uppercase=False):
             len(key) + 10)
 
     print(string)
+
+
+def savefig(filepath):
+    """
+    Print the values of an object nicely on a single line
+
+    Parameters:
+        filepath (str): Path where the figure should be saved
+    """
+    plt.savefig(filepath, dpi=250, bbox_inches='tight', pad_inches=0.2)
 
 
 def get_knmi_data():

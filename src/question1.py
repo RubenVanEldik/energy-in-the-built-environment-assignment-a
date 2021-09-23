@@ -60,7 +60,7 @@ def create_measured_vs_calculated_scatterplot(irradiance):
         # Add a trend line
         subplot.plot([0, 1000], [0, 1000], color='black', linewidth=1)
 
-    plt.savefig("../figures/question1/measured_vs_calculated_scatterplot.png", dpi=300)
+    utils.savefig('../figures/question1/measured_vs_calculated_scatterplot.png')
     
 def create_elevation_vs_error_scatterplot(irradiance):
     """
@@ -84,7 +84,7 @@ def create_elevation_vs_error_scatterplot(irradiance):
         subplot.scatter(irradiance['solar_elevation'], dni_error, s=0.00005)
         subplot.title.set_text(model.upper())
 
-    plt.savefig("../figures/question1/elevation_vs_error_scatterplot.png", dpi=300)
+    utils.savefig('../figures/question1/elevation_vs_error_scatterplot.png')
 
 
 def create_histogram(irradiance):
@@ -110,7 +110,7 @@ def create_histogram(irradiance):
         # Create a subplot and set the model as title
         subplot.hist(dni_error, log=True, bins=100)
         subplot.title.set_text(model.upper())
-    plt.savefig("../figures/question1/histogram.png", dpi=300)
+    utils.savefig('../figures/question1/histogram.png')
 
 
 # Get the irradiance and position of the sun
