@@ -15,8 +15,8 @@ filename = utils.get_knmi_data()
 irradiance = utils.get_irradiance(filename, latitude=LATITUDE, longitude=LONGITUDE, index_col='datetime', temp_col='temp')
 
 # Get the DNI and DHI
-dirindex_dni = utils.calculate_dni('dirindex', irradiance, latitude=LATITUDE, longitude=LONGITUDE)
-dirindex_dhi = irradiance.GHI - dirindex_dni
+irradiance['DNI'] = utils.calculate_dni('dirindex', irradiance, latitude=LATITUDE, longitude=LONGITUDE)
+irradiance['DHI'] = irradiance.GHI - irradiance.DNI
 
 # Loop over all facades of all buildings and calculate the the irradiance for each hour
 for building in buildings:
@@ -26,15 +26,11 @@ for building in buildings:
         azimuth = facade['azimuth']
         zenith = irradiance.solar_zenith
         azimuth = irradiance.solar_azimuth
-        dni = dirindex_dni
+        dni = irradiance.DNI
         ghi = irradiance.GHI
-        dhi = dirindex_dhi
+        dhi = irradiance.DHI
         
         poa = pvlib.irradiance.get_total_irradiance(tilt, azimuth, zenith, azimuth, dni, ghi, dhi)
         facade['poa_total'] = poa.poa_global.sum() / 1000
         facade['poa_diffuse'] = poa.poa_diffuse.sum() / 1000
         facade['poa_direct'] = poa.poa_direct.sum() / 1000
-
-# Calculating POA question 2.3
-# for building in buildings:
-# for facade in building:
