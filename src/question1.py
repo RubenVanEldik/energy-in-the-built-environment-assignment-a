@@ -39,7 +39,7 @@ def create_plot(rows, columns, *, xlabel, ylabel):
     return figure, axes
 
 
-def create_scatterplot(irradiance):
+def create_measured_vs_calculated_scatterplot(irradiance):
     """
     Create a scatter plot of measured DNI vs the computed DNI
 
@@ -54,13 +54,37 @@ def create_scatterplot(irradiance):
 
     for index, model in enumerate(MODELS):
         subplot = axes[index // 2][index % 2]
-        subplot.scatter(irradiance.DNI, irradiance['dni_' + model], s=0.0001)
+        subplot.scatter(irradiance.DNI, irradiance['dni_' + model], s=0.00005)
         subplot.title.set_text(model.upper())
 
         # Add a trend line
         subplot.plot([0, 1000], [0, 1000], color='black', linewidth=1)
 
-    plt.savefig("../figures/part1/scatterplot.png", dpi=300)
+    plt.savefig("../figures/part1/measured_vs_calculated_scatterplot.png", dpi=300)
+    
+def create_elevation_vs_error_scatterplot(irradiance):
+    """
+    Create a scatter plot of the solar elevation vs DNI error
+
+    Parameters:
+        irradiance (DataFrame): DataFrame with the irradiance
+
+    Returns:
+        null
+    """
+    figure, axes = create_plot(
+        2, 2, xlabel='Solar elevation [deg]', ylabel='DNI error [$W/m^2$]')
+
+    for index, model in enumerate(MODELS):
+        dni_measured = irradiance.DNI
+        dni_calculated = irradiance['dni_' + model]
+        dni_error = dni_calculated - dni_measured
+
+        subplot = axes[index // 2][index % 2]
+        subplot.scatter(irradiance['solar_elevation'], dni_error, s=0.00005)
+        subplot.title.set_text(model.upper())
+
+    plt.savefig("../figures/part1/elevation_vs_error_scatterplot.png", dpi=300)
 
 
 def create_histogram(irradiance):
@@ -99,5 +123,6 @@ for model in MODELS:
     utils.print_object(errors, name=model, uppercase=True)
 
 # Create the plots
-create_scatterplot(irradiance)
+create_measured_vs_calculated_scatterplot(irradiance)
+create_elevation_vs_error_scatterplot(irradiance)
 create_histogram(irradiance)
