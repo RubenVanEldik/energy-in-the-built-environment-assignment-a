@@ -1,7 +1,9 @@
 # -*- coding: utf-8 -*-
 
 import json
+import numpy as np
 import pandas as pd
+import matplotlib.pyplot as plt
 import pvlib
 import utils
 
@@ -84,14 +86,28 @@ def find_best_orientation(irradiance, *, azimuths, tilts=range(10, 45, 5), plotn
         all_orientations.loc[tilt] = list(map(lambda azimuth : calculate_poa(tilt, azimuth, irradiance)['total'], azimuths))
 
     # Create and save the bar chart
-    fig = all_orientations.plot(kind='bar', xlabel='Tilt [deg]', ylabel='Total irradiance [kWh/m2 year]')
+    fig = all_orientations.plot(kind='bar', xlabel='Tilt [deg]', ylabel='Total irradiance [$kWh/m^2 year$]')
     fig.legend(title='Azimuth [deg]', loc=4)
     utils.savefig(f'../figures/question2/{plotname}.png')
+    plt.show()
 
     # Find and return the optimal azimuth and tilt in the DataFrame
     optimal_azimuth = all_orientations.max().idxmax()
     optimal_tilt = all_orientations[optimal_azimuth].idxmax()
     return {'tilt': optimal_tilt, 'azimuth': optimal_azimuth}
+
+def create_poa_bar_chart():
+    """
+    Create a bar chart with the total POA for each facade
+    """
+    all_poas = pd.Series([], dtype='float64')
+    for building in buildings:
+        for facade_name in buildings[building]['facades']:
+            facade = buildings[building]['facades'][facade_name]
+            all_poas.loc[f'{building} - {facade_name}'] = facade['poa_total']
+            
+    all_poas.plot(kind='bar', ylabel='Total irradiance [$kWh/m^2 year$]')
+    utils.savefig('../figures/question2/poa_all_facades.png')
 
 
 # Find the best orientation for the panels on rooftop A and B
@@ -101,4 +117,4 @@ buildings['House A']['facades']['Rooftop'] = orientation_rooftop_a
 buildings['House B']['facades']['Rooftop'] = orientation_rooftop_b
 
 get_poa_all_facades(buildings, irradiance)
-
+create_poa_bar_chart()
