@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import json
+import numpy as np
 import pandas as pd
 import pvlib
 import utils
@@ -65,7 +66,7 @@ def get_poa_all_facades(buildings, irradiance):
             facade['poa_direct'] = poa['direct']
           
             
-def find_best_tilt(irradiance):
+def find_best_orientation(irradiance, *, azimuths, tilts):
     """
     Calculate the total POA for different tilt angles
 
@@ -75,16 +76,19 @@ def find_best_tilt(irradiance):
     Returns:
         null
     """
-    tilts = range(10, 45, 5)
-    poa_angles = pd.DataFrame(columns = ['total', 'diffuse', 'direct'])
-    for tilt in tilts:
-        poa = calculate_poa(tilt, 180, irradiance)
-        poa_angles.loc[tilt] = [poa['total'], poa['diffuse'], poa['direct']]
+    # Create a DataFrame with a double index (azimuth and tilt)
+    index = [np.array(azimuths * 3), np.array(['total', 'diffuse', 'direct'] * len(azimuths))]
+    poa_angles = pd.DataFrame(index=index)
+    for azimuth in azimuths:
+        for tilt in tilts:
+            poa = calculate_poa(tilt, azimuth, irradiance)
+            poa_angles.loc[(azimuth, tilt)] = [poa['total'], poa['diffuse'], poa['direct']]
 
     # Create the bar chart
-    fig = poa_angles.total.plot(kind='bar', ylabel='Total irradiance [kWh/m2 year]')
-    fig.set_xticklabels([f'{tilt} deg' for tilt in tilts], rotation=45)
+    #fig = poa_angles.total.plot(kind='bar', ylabel='Total irradiance [kWh/m2 year]')
+    #fig.set_xticklabels([f'{tilt} deg' for tilt in tilts], rotation=45)
 
         
 get_poa_all_facades(buildings, irradiance)
-find_best_tilt(irradiance)
+find_best_orientation(irradiance, azimuths=[180], tilts=range(10, 45, 5))
+find_best_orientation(irradiance, azimuths=[135, 225], tilts=range(10, 45, 5))
