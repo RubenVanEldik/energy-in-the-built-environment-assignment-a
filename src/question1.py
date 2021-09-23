@@ -27,7 +27,7 @@ def create_plot(rows, columns, *, xlabel, ylabel):
     # Create a figure with subplots and set the correct spacing
     figure, axes = plt.subplots(
         nrows=rows, ncols=columns, sharex=True, sharey=True)
-    figure.subplots_adjust(wspace=0.2, hspace=0.4)
+    figure.subplots_adjust(wspace=0.05, hspace=0.35)
 
     # Set the axes label
     for vertical_axe in axes:
