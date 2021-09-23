@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import json
+import pandas as pd
 import pvlib
 import utils
 
@@ -62,6 +63,28 @@ def get_poa_all_facades(buildings, irradiance):
             facade['poa_total'] = poa['total']
             facade['poa_diffuse'] = poa['diffuse']
             facade['poa_direct'] = poa['direct']
+          
             
-            
+def find_best_tilt(irradiance):
+    """
+    Calculate the total POA for different tilt angles
+
+    Parameters:
+        irradiance (DataFrame): DataFrame with the irradiance
+
+    Returns:
+        null
+    """
+    tilts = range(10, 45, 5)
+    poa_angles = pd.DataFrame(columns = ['total', 'diffuse', 'direct'])
+    for tilt in tilts:
+        poa = calculate_poa(tilt, 180, irradiance)
+        poa_angles.loc[tilt] = [poa['total'], poa['diffuse'], poa['direct']]
+
+    # Create the bar chart
+    fig = poa_angles.total.plot(kind='bar', ylabel='Total irradiance [kWh/m2 year]')
+    fig.set_xticklabels([f'{tilt} deg' for tilt in tilts], rotation=45)
+
+        
 get_poa_all_facades(buildings, irradiance)
+find_best_tilt(irradiance)
