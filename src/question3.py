@@ -96,8 +96,9 @@ calculate_possible_capacity()
 calculate_dc_power()
 
 # Create bar charts for the total and specific annual yield
-create_annual_yield_bar_chart('total_annual_yield_dc', filename='total_annual_yield_dc', ylabel='Total annual yield [$kWh / year$]')
-create_annual_yield_bar_chart('specific_annual_yield_dc', filename='specific_annual_yield_dc', ylabel='Specific annual yield [$kWh / m^2 year$]')
+create_annual_yield_bar_chart('total_annual_yield_dc', filename='total_annual_yield_dc', ylabel='Total annual yield [$kWh_{dc} / year$]')
+create_annual_yield_bar_chart('total_annual_yield_ac', filename='total_annual_yield_ac', ylabel='Total annual yield [$kWh_{ac} / year$]')
+create_annual_yield_bar_chart('specific_annual_yield_dc', filename='specific_annual_yield_dc', ylabel='Specific annual yield [$kWh_{dc} / m^2 year$]')
 create_table_pv_systems()
 
 # Save the buildings info in a new JSON file
