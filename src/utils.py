@@ -55,7 +55,7 @@ def save_json_file(obj, *, filepath):
         filepath (string): Path of where the JSON file should be stored
     """
     with open(filepath, 'w') as fp:
-        json.dump(obj, fp, indent=2)
+        json.dump(obj, fp, indent=2, ensure_ascii=False)
 
 
 def savefig(filepath):
