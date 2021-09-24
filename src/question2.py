@@ -116,5 +116,9 @@ orientation_rooftop_a = find_best_orientation(irradiance, plotname='rooftop_a', 
 buildings['House A']['facades']['Rooftop'] = orientation_rooftop_a
 buildings['House B']['facades']['Rooftop'] = orientation_rooftop_b
 
+# Calculate the POA for all facades and save the extended building info to a JSON file
 get_poa_all_facades(buildings, irradiance)
+utils.save_json_file(buildings, filepath='../input/buildings_processed.json')
+
+# Create a bar chart of the POA of all surfaces
 create_poa_bar_chart()

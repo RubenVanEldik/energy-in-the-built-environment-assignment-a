@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+import json
 import pandas as pd
 from scipy import stats
 import matplotlib.pyplot as plt
@@ -43,6 +44,18 @@ def print_object(dict, *, name='', uppercase=False):
             len(key) + 10)
 
     print(string)
+
+
+def save_json_file(obj, *, filepath):
+    """
+    Save a object or list as a JSON file
+
+    Parameters:
+        obj (dict or list): Dictionary or list that should be stored
+        filepath (string): Path of where the JSON file should be stored
+    """
+    with open(filepath, 'w') as fp:
+        json.dump(obj, fp, indent=2)
 
 
 def savefig(filepath):
