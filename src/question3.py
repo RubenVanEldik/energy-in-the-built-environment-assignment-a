@@ -34,14 +34,6 @@ def calculate_possible_capacity():
 
 
 def calculate_dc_power():
-    wind = irradiance.wind
-    temp_air = irradiance.temp
-    solar_zenith = irradiance.solar_zenith
-    solar_azimuth = irradiance.solar_azimuth
-    solar_apparent_zenith = irradiance.solar_apparent_zenith
-    dni = irradiance.DNI
-    ghi = irradiance.GHI
-    dhi = irradiance.DHI
     
     for building in buildings:
         for facade_name in buildings[building]:
@@ -51,29 +43,12 @@ def calculate_dc_power():
             for module_type in parameters:
                 module = parameters[module_type]
                 
-                # Get the POA for this specific facade
-                poa = pvlib.irradiance.get_total_irradiance(facade['tilt'], facade['azimuth'], solar_zenith, solar_azimuth, dni, ghi, dhi)
+                power_info = utils.calculate_power_output(irradiance, module, tilt=facade['tilt'], azimuth=facade['azimuth'])
 
-                # Calculate the temperature of the cell
-                temp_cell = pvlib.temperature.sapm_cell(poa.poa_global, temp_air, wind, module.A, module.B, module.DTC)
-                
-                # Calculate the relative and absolute airmass
-                relative_airmass = pvlib.atmosphere.get_relative_airmass(solar_apparent_zenith)
-                absolute_airmass = pvlib.atmosphere.get_absolute_airmass(relative_airmass)
-                
-                # Calculate the Angle of Incidence
-                aoi = pvlib.irradiance.aoi(facade['tilt'], facade['azimuth'], solar_zenith, solar_azimuth)
-                
-                # Calculate the effective irradiance
-                effective_irradiance = pvlib.pvsystem.sapm_effective_irradiance(poa.poa_direct, poa.poa_diffuse, absolute_airmass, aoi, module)
-                
-                # Calculate the performance of the cell
-                performance = pvlib.pvsystem.sapm(effective_irradiance, temp_cell, module)
-                
-                # Calculate the total and relative annual yield
                 num_panels = facade[module_type]['num_panels']
-                facade[module_type]['total_annual_yield'] = num_panels * performance.p_mp.sum() / 1000
-                facade[module_type]['specific_annual_yield'] = facade[module_type]['total_annual_yield'] / facade['area']
+                annual_yield_dc = num_panels * power_info['dc'].sum() / 1000
+                facade[module_type]['total_annual_yield'] = annual_yield_dc
+                facade[module_type]['specific_annual_yield'] = annual_yield_dc / facade['area']
     
     
 def create_annual_yield_bar_chart(column, *, filename, ylabel):

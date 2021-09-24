@@ -188,3 +188,40 @@ def get_knmi_irradiance():
     irradiance['DNI'] = calculate_dni('dirindex', irradiance, latitude=latitude, longitude=longitude)
     irradiance['DHI'] = irradiance.GHI - irradiance.DNI * irradiance.solar_zenith.apply(math.cos)
     return irradiance
+
+
+def calculate_power_output(irradiance, module, *, tilt, azimuth):
+    # Define some variables
+    wind = irradiance.wind
+    temp_air = irradiance.temp
+    solar_zenith = irradiance.solar_zenith
+    solar_azimuth = irradiance.solar_azimuth
+    solar_apparent_zenith = irradiance.solar_apparent_zenith
+    dni = irradiance.DNI
+    ghi = irradiance.GHI
+    dhi = irradiance.DHI
+    
+    # Get the POA for this specific facade
+    poa = pvlib.irradiance.get_total_irradiance(tilt, azimuth, solar_zenith, solar_azimuth, dni, ghi, dhi)
+
+    # Calculate the temperature of the cell
+    temp_cell = pvlib.temperature.sapm_cell(poa.poa_global, temp_air, wind, module.A, module.B, module.DTC)
+    
+    # Calculate the relative and absolute airmass
+    relative_airmass = pvlib.atmosphere.get_relative_airmass(solar_apparent_zenith)
+    absolute_airmass = pvlib.atmosphere.get_absolute_airmass(relative_airmass)
+    
+    # Calculate the Angle of Incidence
+    aoi = pvlib.irradiance.aoi(tilt, azimuth, solar_zenith, solar_azimuth)
+    
+    # Calculate the effective irradiance
+    effective_irradiance = pvlib.pvsystem.sapm_effective_irradiance(poa.poa_direct, poa.poa_diffuse, absolute_airmass, aoi, module)
+    
+    # Calculate the performance of the cell
+    performance = pvlib.pvsystem.sapm(effective_irradiance, temp_cell, module)
+    
+    # Calculate the total and relative annual yield
+    return {
+        'dc': performance.p_mp,
+        'ac': 0
+    }
