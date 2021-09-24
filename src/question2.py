@@ -60,8 +60,8 @@ def get_poa_all_facades(buildings, irradiance):
         null
     """
     for building in buildings:
-        for facade_name in buildings[building]['facades']:
-            facade = buildings[building]['facades'][facade_name]
+        for facade_name in buildings[building]:
+            facade = buildings[building][facade_name]
             poa = calculate_poa(facade['tilt'], facade['azimuth'], irradiance)
             facade['poa_total'] = poa['total']
             facade['poa_diffuse'] = poa['diffuse']
@@ -102,8 +102,8 @@ def create_poa_bar_chart():
     """
     all_poas = pd.Series([], dtype='float64')
     for building in buildings:
-        for facade_name in buildings[building]['facades']:
-            facade = buildings[building]['facades'][facade_name]
+        for facade_name in buildings[building]:
+            facade = buildings[building][facade_name]
             all_poas.loc[f'{building} - {facade_name}'] = facade['poa_total']
             
     all_poas.plot(kind='bar', ylabel='Total irradiance [$kWh/m^2 year$]')
@@ -113,8 +113,8 @@ def create_poa_bar_chart():
 # Find the best orientation for the panels on rooftop A and B
 orientation_rooftop_b = find_best_orientation(irradiance, plotname='rooftop_b', azimuths=[180])
 orientation_rooftop_a = find_best_orientation(irradiance, plotname='rooftop_a', azimuths=[135, 225])
-buildings['House A']['facades']['Rooftop'] = { **orientation_rooftop_a, 'area': 3000, 'coverage': 0.5 }
-buildings['House B']['facades']['Rooftop'] = { **orientation_rooftop_b, 'area': 1500, 'coverage': 0.5 }
+buildings['House A']['Rooftop'] = { **orientation_rooftop_a, 'area': 3000, 'coverage': 0.5 }
+buildings['House B']['Rooftop'] = { **orientation_rooftop_b, 'area': 1500, 'coverage': 0.5 }
 
 # Calculate the POA for all facades and save the extended building info to a JSON file
 get_poa_all_facades(buildings, irradiance)

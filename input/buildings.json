@@ -1,66 +1,58 @@
 {
   "House A": {
-    "facades": {
-      "Façade SE": {
-        "tilt": 90,
-        "azimuth": 135,
-        "area": 6000,
-        "coverage": 0.3
-      },
-      "Façade SW": {
-        "tilt": 90,
-        "azimuth": 225,
-        "area": 5000,
-        "coverage": 0.3
-      }
+    "Façade SE": {
+      "tilt": 90,
+      "azimuth": 135,
+      "area": 6000,
+      "coverage": 0.3
+    },
+    "Façade SW": {
+      "tilt": 90,
+      "azimuth": 225,
+      "area": 5000,
+      "coverage": 0.3
     }
   },
   "House B": {
-    "facades": {
-      "Façade W": {
-        "tilt": 90,
-        "azimuth": 270,
-        "area": 900,
-        "coverage": 0.3
-      },
-      "Façade S": {
-        "tilt": 90,
-        "azimuth": 180,
-        "area": 1500,
-        "coverage": 0.3
-      },
-      "Façade E": {
-        "tilt": 90,
-        "azimuth": 90,
-        "area": 900,
-        "coverage": 0.3
-      }
+    "Façade W": {
+      "tilt": 90,
+      "azimuth": 270,
+      "area": 900,
+      "coverage": 0.3
+    },
+    "Façade S": {
+      "tilt": 90,
+      "azimuth": 180,
+      "area": 1500,
+      "coverage": 0.3
+    },
+    "Façade E": {
+      "tilt": 90,
+      "azimuth": 90,
+      "area": 900,
+      "coverage": 0.3
     }
   },
   "House C": {
-    "facades": {
-      "Rooftop S": {
-        "tilt": 40,
-        "azimuth": 180,
-        "area": 161.0493631904,
-        "coverage": 0.6
-      }
+    "Rooftop S": {
+      "tilt": 40,
+      "azimuth": 180,
+      "area": 161.0493631904,
+      "coverage": 0.6
     }
   },
   "House D": {
-    "facades": {
-      "Rooftop W": {
-        "tilt": 40,
-        "azimuth": 270,
-        "area": 161.0493631904,
-        "coverage": 0.6
-      },
-      "Rooftop E": {
-        "tilt": 40,
-        "azimuth": 90,
-        "area": 161.0493631904,
-        "coverage": 0.6
-      }
+    "Rooftop W": {
+      "tilt": 40,
+      "azimuth": 270,
+      "area": 161.0493631904,
+      "coverage": 0.6
+    },
+    "Rooftop E": {
+      "tilt": 40,
+      "azimuth": 90,
+      "area": 161.0493631904,
+      "coverage": 0.6
     }
   }
 }
