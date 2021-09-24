@@ -73,10 +73,28 @@ def calculate_dc_power():
                 # Calculate the total and relative annual yield
                 num_panels = facade[module_type]['num_panels']
                 facade[module_type]['total_annual_yield'] = num_panels * performance.p_mp.sum() / 1000
-                facade[module_type]['relative_annual_yield'] = facade[module_type]['total_annual_yield'] / facade['area']
+                facade[module_type]['specific_annual_yield'] = facade[module_type]['total_annual_yield'] / facade['area']
     
+    
+def create_annual_yield_bar_chart(column, *, filename, ylabel):
+    """
+    Create a bar chart with the total POA for each facade
+    """
+    facades_dataframe = pd.DataFrame({}, columns=parameters.columns.to_series())
+    for building in buildings:
+        for facade_name in buildings[building]:
+            facade = buildings[building][facade_name]
+            facades_dataframe.loc[f'{building} - {facade_name}'] = list(map(lambda parameter : facade[parameter][column], parameters))
+            
+    facades_dataframe.plot(kind='bar', ylabel=ylabel)
+    utils.savefig(f'../figures/question3/{filename}.png')
+
+
 calculate_possible_capacity()
 calculate_dc_power()
 
+# Create bar charts for the total and specific annual yield
+create_annual_yield_bar_chart('total_annual_yield', filename='total_annual_yield', ylabel='Total annual yield [$kWh / year$]')
+create_annual_yield_bar_chart('specific_annual_yield', filename='specific_annual_yield', ylabel='Specific annual yield [$kWh / m^2 year$]')
 # Save the buildings info in a new JSON file
 utils.save_json_file(buildings, filepath='../input/buildings_processed_q3.json')
