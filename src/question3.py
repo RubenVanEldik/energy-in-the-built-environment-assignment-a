@@ -90,11 +90,36 @@ def create_annual_yield_bar_chart(column, *, filename, ylabel):
     utils.savefig(f'../figures/question3/{filename}.png')
 
 
+def create_table_pv_systems():
+    facades = pd.DataFrame({}, columns=['Facade name', 'Best module', 'Total capacity', 'Tilt', 'Orientation'])
+    for building in buildings:
+        for facade_name in buildings[building]:
+            facade = buildings[building][facade_name]
+            
+            # Find the best module for specific facade
+            best_module = None
+            for module in parameters:
+                if not best_module or facade[module]['total_annual_yield'] > facade[best_module]['total_annual_yield']:
+                    best_module = module
+                
+            # Add the facade info to the facades DataFrame
+            name = f'{building} - {facade_name}'
+            total_capacity = facade[best_module]['possible_capacity']
+            tilt = facade['tilt']
+            orientation = facade['azimuth']
+            facades.loc[name] = [name, best_module, total_capacity, tilt, orientation]
+    
+    # Create a LaTeX table from the DataFrame
+    print(facades.to_latex())
+
+
 calculate_possible_capacity()
 calculate_dc_power()
 
 # Create bar charts for the total and specific annual yield
 create_annual_yield_bar_chart('total_annual_yield', filename='total_annual_yield', ylabel='Total annual yield [$kWh / year$]')
 create_annual_yield_bar_chart('specific_annual_yield', filename='specific_annual_yield', ylabel='Specific annual yield [$kWh / m^2 year$]')
+create_table_pv_systems()
+
 # Save the buildings info in a new JSON file
 utils.save_json_file(buildings, filepath='../input/buildings_processed_q3.json')
