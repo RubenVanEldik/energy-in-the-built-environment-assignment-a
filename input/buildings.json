@@ -37,7 +37,7 @@
     "Rooftop S": {
       "tilt": 40,
       "azimuth": 180,
-      "area": 161.0493631904,
+      "area": 201.311703988,
       "coverage": 0.6
     }
   },
@@ -45,13 +45,13 @@
     "Rooftop W": {
       "tilt": 40,
       "azimuth": 270,
-      "area": 161.0493631904,
+      "area": 201.311703988,
       "coverage": 0.6
     },
     "Rooftop E": {
       "tilt": 40,
       "azimuth": 90,
-      "area": 161.0493631904,
+      "area": 201.311703988,
       "coverage": 0.6
     }
   }
