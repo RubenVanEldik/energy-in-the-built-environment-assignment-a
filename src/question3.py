@@ -26,8 +26,11 @@ def calculate_possible_capacity():
             # Add the number of panels and the total possible max capacity for all three modules
             for module_type in parameters:
                 module = parameters[module_type]
-                facade[f'panels_{module_type}'] = math.floor(installation_area / module.get('Area'))
-                facade[f'possible_capacity_{module_type}'] = facade[f'panels_{module_type}'] * module.get('Wp')
+                num_panels = math.floor(installation_area / module.get('Area'))
+                facade[module_type] = {
+                    'num_panels': num_panels,
+                    'possible_capacity': num_panels * module.get('Wp')
+                }
 
 
 def calculate_dc_power():
@@ -68,9 +71,9 @@ def calculate_dc_power():
                 performance = pvlib.pvsystem.sapm(effective_irradiance, temp_cell, module)
                 
                 # Calculate the total and relative annual yield
-                num_panels = facade[f'panels_{module_type}']
-                facade[f'total_annual_yield_{module_type}'] = num_panels * performance.p_mp.sum() / 1000
-                facade[f'relative_annual_yield_{module_type}'] = facade[f'total_annual_yield_{module_type}'] / facade['area']
+                num_panels = facade[module_type]['num_panels']
+                facade[module_type]['total_annual_yield'] = num_panels * performance.p_mp.sum() / 1000
+                facade[module_type]['relative_annual_yield'] = facade[module_type]['total_annual_yield'] / facade['area']
     
 calculate_possible_capacity()
 calculate_dc_power()
