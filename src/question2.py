@@ -94,7 +94,7 @@ def find_best_orientation(irradiance, *, azimuths, tilts=range(10, 45, 5), plotn
     # Find and return the optimal azimuth and tilt in the DataFrame
     optimal_azimuth = all_orientations.max().idxmax()
     optimal_tilt = all_orientations[optimal_azimuth].idxmax()
-    return {'tilt': optimal_tilt, 'azimuth': optimal_azimuth}
+    return { 'tilt': int(optimal_tilt), 'azimuth': int(optimal_azimuth) }
 
 def create_poa_bar_chart():
     """
@@ -113,8 +113,8 @@ def create_poa_bar_chart():
 # Find the best orientation for the panels on rooftop A and B
 orientation_rooftop_b = find_best_orientation(irradiance, plotname='rooftop_b', azimuths=[180])
 orientation_rooftop_a = find_best_orientation(irradiance, plotname='rooftop_a', azimuths=[135, 225])
-buildings['House A']['facades']['Rooftop'] = orientation_rooftop_a
-buildings['House B']['facades']['Rooftop'] = orientation_rooftop_b
+buildings['House A']['facades']['Rooftop'] = { **orientation_rooftop_a, 'area': 3000, 'coverage': 0.5 }
+buildings['House B']['facades']['Rooftop'] = { **orientation_rooftop_b, 'area': 1500, 'coverage': 0.5 }
 
 # Calculate the POA for all facades and save the extended building info to a JSON file
 get_poa_all_facades(buildings, irradiance)
