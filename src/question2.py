@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+import math
 import json
 import numpy as np
 import pandas as pd
@@ -19,7 +20,7 @@ irradiance = utils.get_irradiance(filename, latitude=LATITUDE, longitude=LONGITU
 
 # Get the DNI and DHI
 irradiance['DNI'] = utils.calculate_dni('dirindex', irradiance, latitude=LATITUDE, longitude=LONGITUDE)
-irradiance['DHI'] = irradiance.GHI - irradiance.DNI
+irradiance['DHI'] = irradiance.GHI - irradiance.DNI * irradiance.solar_zenith.apply(math.cos)
 
 def calculate_poa(tilt, azimuth, irradiance):
     """
