@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import json
+import math
 import pandas as pd
 from scipy import stats
 import matplotlib.pyplot as plt
@@ -168,3 +169,22 @@ def calculate_dni(model, irradiance, *, latitude, longitude):
     if model == 'erbs':
         return pvlib.irradiance.erbs(ghi, zenith, time).dni
     raise Exception('Invalid GHI-DNI model type')
+    
+def get_knmi_irradiance():
+    """
+    Get the KNMI data and calculate the irradiance for each timestep
+
+    Returns:
+        DataFrame: Single DataFrame with all weather and irradiance data
+    """
+    latitude = 53.224
+    longitude = 5.752
+
+    # Get the irradiance data from the KNMI data
+    filename = get_knmi_data()
+    irradiance = get_irradiance(filename, latitude=latitude, longitude=longitude, index_col='datetime', temp_col='temp')
+    
+    # Get the DNI and DHI
+    irradiance['DNI'] = calculate_dni('dirindex', irradiance, latitude=latitude, longitude=longitude)
+    irradiance['DHI'] = irradiance.GHI - irradiance.DNI * irradiance.solar_zenith.apply(math.cos)
+    return irradiance

@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 
-import math
 import json
 import numpy as np
 import pandas as pd
@@ -8,19 +7,11 @@ import matplotlib.pyplot as plt
 import pvlib
 import utils
 
-LATITUDE = 53.224
-LONGITUDE = 5.752
-
 # Get the building info
 buildings = json.load(open('../input/buildings.json', 'r'))
 
-# Get the irradiance data from the KNMI data
-filename = utils.get_knmi_data()
-irradiance = utils.get_irradiance(filename, latitude=LATITUDE, longitude=LONGITUDE, index_col='datetime', temp_col='temp')
+irradiance = utils.get_knmi_irradiance()
 
-# Get the DNI and DHI
-irradiance['DNI'] = utils.calculate_dni('dirindex', irradiance, latitude=LATITUDE, longitude=LONGITUDE)
-irradiance['DHI'] = irradiance.GHI - irradiance.DNI * irradiance.solar_zenith.apply(math.cos)
 
 def calculate_poa(tilt, azimuth, irradiance):
     """
