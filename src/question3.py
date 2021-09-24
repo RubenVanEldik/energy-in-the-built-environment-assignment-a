@@ -47,8 +47,12 @@ def calculate_dc_power():
 
                 num_panels = facade[module_type]['num_panels']
                 annual_yield_dc = num_panels * power_info['dc'].sum() / 1000
-                facade[module_type]['total_annual_yield'] = annual_yield_dc
-                facade[module_type]['specific_annual_yield'] = annual_yield_dc / facade['area']
+                annual_yield_ac = num_panels * power_info['ac'].sum() / 1000
+                facade[module_type]['total_annual_yield_dc'] = annual_yield_dc
+                facade[module_type]['specific_annual_yield_dc'] = annual_yield_dc / facade['area']
+                facade[module_type]['total_annual_yield_ac'] = annual_yield_ac
+                facade[module_type]['specific_annual_yield_ac'] = annual_yield_ac / facade['area']
+                facade[module_type]['annual_inverter_efficiency'] = facade[module_type]['total_annual_yield_ac'] / facade[module_type]['total_annual_yield_dc'] 
     
     
 def create_annual_yield_bar_chart(column, *, filename, ylabel):
@@ -74,7 +78,7 @@ def create_table_pv_systems():
             # Find the best module for specific facade
             best_module = None
             for module in parameters:
-                if not best_module or facade[module]['total_annual_yield'] > facade[best_module]['total_annual_yield']:
+                if not best_module or facade[module]['total_annual_yield_dc'] > facade[best_module]['total_annual_yield_dc']:
                     best_module = module
                 
             # Add the facade info to the facades DataFrame
@@ -92,8 +96,8 @@ calculate_possible_capacity()
 calculate_dc_power()
 
 # Create bar charts for the total and specific annual yield
-create_annual_yield_bar_chart('total_annual_yield', filename='total_annual_yield', ylabel='Total annual yield [$kWh / year$]')
-create_annual_yield_bar_chart('specific_annual_yield', filename='specific_annual_yield', ylabel='Specific annual yield [$kWh / m^2 year$]')
+create_annual_yield_bar_chart('total_annual_yield_dc', filename='total_annual_yield_dc', ylabel='Total annual yield [$kWh / year$]')
+create_annual_yield_bar_chart('specific_annual_yield_dc', filename='specific_annual_yield_dc', ylabel='Specific annual yield [$kWh / m^2 year$]')
 create_table_pv_systems()
 
 # Save the buildings info in a new JSON file

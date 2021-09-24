@@ -169,7 +169,38 @@ def calculate_dni(model, irradiance, *, latitude, longitude):
     if model == 'erbs':
         return pvlib.irradiance.erbs(ghi, zenith, time).dni
     raise Exception('Invalid GHI-DNI model type')
+
+
+def get_ac_from_dc(p_dc, p_ac0, *, efficiency_nom=0.96):
+    """
+    Calculate AC power output of the inverter for a specific DC power
+
+    Parameters:
+        p_dc (float or int): The DC power of the solar panels
+        p_ac0 (float or int): Rated power of the inverter, equal to the rated DC power of the PV system
+
+    Returns:
+        float: The efficiency of the inverter
+    """
+    # Return 0 if the DC power is 0
+    if p_dc == 0:
+        return 0
+
+    # Calculate the rated DC power and zeta
+    p_dc0 = p_ac0 / efficiency_nom
+    zeta = p_dc / p_dc0
     
+    # Return the rated power of the inverter if the DC power is larger or equal to the rated DC power
+    if p_dc >= p_dc0:
+        return p_ac0
+
+    # Calculate the efficiency
+    efficiency = -0.0162 * zeta - (0.0059 / zeta) + 0.9858
+
+    # Return the efficiency of the inverter times the DC power
+    return efficiency * p_dc
+
+
 def get_knmi_irradiance():
     """
     Get the KNMI data and calculate the irradiance for each timestep
@@ -223,5 +254,5 @@ def calculate_power_output(irradiance, module, *, tilt, azimuth):
     # Calculate the total and relative annual yield
     return {
         'dc': performance.p_mp,
-        'ac': 0
+        'ac': performance.p_mp.apply(get_ac_from_dc, args=(module.Wp,))
     }
