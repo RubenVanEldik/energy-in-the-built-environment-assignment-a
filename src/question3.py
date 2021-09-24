@@ -8,9 +8,10 @@ Created on Thu Sep 23 16:35:32 2021
 import pandas as pd
 import math
 import json
+import utils
 
 parameters = pd.read_excel('../input/Module parameters.xlsx', index_col='Parameters')
-buildings = json.load(open('../input/buildings_processed.json', 'r'))
+buildings = json.load(open('../input/buildings_processed_q2.json', 'r'))
 
 def calculate_possible_capacity():
     for building in buildings:
@@ -28,3 +29,6 @@ def calculate_possible_capacity():
 
 
 calculate_possible_capacity()
+
+# Save the buildings info in a new JSON file
+utils.save_json_file(buildings, filepath='../input/buildings_processed_q3.json')

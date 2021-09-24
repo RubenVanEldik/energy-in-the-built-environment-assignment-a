@@ -1,4 +1,5 @@
 .DS_Store
 src/__pycache__/
 input/knmi_processed.csv
-input/buildings_processed.json
+input/buildings_processed_q2.json
+input/buildings_processed_q3.json

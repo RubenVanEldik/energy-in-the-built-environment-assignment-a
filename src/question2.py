@@ -119,7 +119,7 @@ buildings['House B']['Rooftop'] = { **orientation_rooftop_b, 'area': 1500, 'cove
 
 # Calculate the POA for all facades and save the extended building info to a JSON file
 get_poa_all_facades(buildings, irradiance)
-utils.save_json_file(buildings, filepath='../input/buildings_processed.json')
+utils.save_json_file(buildings, filepath='../input/buildings_processed_q2.json')
 
 # Create a bar chart of the POA of all surfaces
 create_poa_bar_chart()
