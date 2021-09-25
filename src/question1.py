@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 
-import matplotlib.pyplot as plt
 import utils
 
 
@@ -8,35 +7,6 @@ import utils
 LATITUDE = 52.08746136865645
 LONGITUDE = 5.168080610130638
 MODELS = ['disc', 'dirint', 'dirindex', 'erbs']
-
-
-def create_plot(rows, columns, *, xlabel, ylabel):
-    """
-    Create a plot with rows x columns subplots and labels on the outer axes
-
-    Parameters:
-        rows (int): Number of rows
-        columns (int): Number of columns
-        xlabel (str): Label for the x-axis
-        ylabel (str): Label for the y-axis
-
-    Returns:
-        figure: Created figure
-        axes: Created axes
-    """
-    # Create a figure with subplots and set the correct spacing
-    figure, axes = plt.subplots(
-        nrows=rows, ncols=columns, sharex=True, sharey=True)
-    figure.subplots_adjust(wspace=0.05, hspace=0.35)
-
-    # Set the axes label
-    for vertical_axe in axes:
-        vertical_axe[0].set(ylabel=ylabel)
-    for horizontal_axe in axes[len(axes) - 1]:
-        horizontal_axe.set(xlabel=xlabel)
-
-    # Return the created figure
-    return figure, axes
 
 
 def create_measured_vs_calculated_scatterplot(irradiance):
@@ -49,7 +19,7 @@ def create_measured_vs_calculated_scatterplot(irradiance):
     Returns:
         null
     """
-    figure, axes = create_plot(
+    figure, axes = utils.create_plot_with_subplots(
         2, 2, xlabel='Measured DNI [$W/m^2$]', ylabel='Computed DNI [$W/m^2$]')
 
     for index, model in enumerate(MODELS):
@@ -72,7 +42,7 @@ def create_elevation_vs_error_scatterplot(irradiance):
     Returns:
         null
     """
-    figure, axes = create_plot(
+    figure, axes = utils.create_plot_with_subplots(
         2, 2, xlabel='Solar elevation [deg]', ylabel='DNI error [$W/m^2$]')
 
     for index, model in enumerate(MODELS):
@@ -97,7 +67,7 @@ def create_histogram(irradiance):
     Returns:
         null
     """
-    figure, axes = create_plot(2, 2, xlabel='DNI error [$W/m^2$]', ylabel='Occurrances [#]')
+    figure, axes = utils.create_plot_with_subplots(2, 2, xlabel='DNI error [$W/m^2$]', ylabel='Occurrances [#]')
 
     for index, model in enumerate(MODELS):
         subplot = axes[index // 2][index % 2]
