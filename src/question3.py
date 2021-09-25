@@ -9,7 +9,6 @@ import pandas as pd
 import math
 import json
 import utils
-import pvlib
 
 irradiance = utils.get_knmi_irradiance()
 parameters = pd.read_excel('../input/Module parameters.xlsx', index_col='Parameters')
@@ -89,7 +88,7 @@ def create_table_pv_systems():
             facades.loc[name] = [name, best_module, total_capacity, tilt, orientation]
     
     # Create a LaTeX table from the DataFrame
-    print(facades.to_latex())
+    utils.save_text_file(facades.to_latex(), filepath='../figures/question3/table_pv_systems.tex')
 
 
 calculate_possible_capacity()
