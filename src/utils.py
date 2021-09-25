@@ -111,7 +111,7 @@ def get_knmi_data():
     data.index = data.index.tz_localize('UTC')
 
     # Export to new csv
-    file_path = '../input/knmi_processed.csv'
+    file_path = '../output/question2/knmi.csv'
     data.to_csv(file_path, sep=";")
     return file_path
 

@@ -131,4 +131,4 @@ create_bar_chart_for_all_modules('annual_inverter_efficiency', filename='annual_
 create_bar_chart_for_best_module('total_annual_yield_ac', filename='total_annual_yield_ac_best', ylabel='Total annual yield [$kWh_{ac} / year$]')
 
 # Save the buildings info in a new JSON file
-utils.save_json_file(buildings, filepath='../input/buildings_processed_q3.json')
+utils.save_json_file(buildings, filepath='../output/question3/buildings.json')

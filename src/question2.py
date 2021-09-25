@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
 import json
-import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 import pvlib
@@ -111,7 +110,7 @@ buildings['House B']['Rooftop'] = { **orientation_rooftop_b, 'area': 1500, 'cove
 
 # Calculate the POA for all facades and save the extended building info to a JSON file
 get_poa_all_facades(buildings, irradiance)
-utils.save_json_file(buildings, filepath='../input/buildings_processed_q2.json')
+utils.save_json_file(buildings, filepath='../output/question2/buildings.json')
 
 # Create a bar chart of the POA of all surfaces
 create_poa_bar_chart()
