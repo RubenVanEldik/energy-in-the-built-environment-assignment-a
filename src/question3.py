@@ -33,7 +33,6 @@ def calculate_possible_capacity():
 
 
 def calculate_dc_power():
-    
     for building in buildings:
         for facade_name in buildings[building]:
             facade = buildings[building][facade_name]
@@ -65,7 +64,7 @@ def create_annual_yield_bar_chart(column, *, filename, ylabel):
             facades_dataframe.loc[f'{building} - {facade_name}'] = list(map(lambda parameter : facade[parameter][column], parameters))
             
     facades_dataframe.plot(kind='bar', ylabel=ylabel)
-    utils.savefig(f'../figures/question3/{filename}.png')
+    utils.savefig(f'../output/question3/{filename}.png')
 
 
 def create_table_pv_systems():
@@ -88,7 +87,7 @@ def create_table_pv_systems():
             facades.loc[name] = [name, best_module, total_capacity, tilt, orientation]
     
     # Create a LaTeX table from the DataFrame
-    utils.save_text_file(facades.to_latex(), filepath='../figures/question3/table_pv_systems.tex')
+    utils.save_text_file(facades.to_latex(), filepath='../output/question3/table_pv_systems.tex')
 
 
 calculate_possible_capacity()

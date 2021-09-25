@@ -81,7 +81,7 @@ def find_best_orientation(irradiance, *, azimuths, tilts=range(10, 45, 5), plotn
     # Create and save the bar chart
     fig = all_orientations.plot(kind='bar', xlabel='Tilt [deg]', ylabel='Total irradiance [$kWh/m^2 year$]')
     fig.legend(title='Azimuth [deg]', loc=4)
-    utils.savefig(f'../figures/question2/{plotname}.png')
+    utils.savefig(f'../output/question2/{plotname}.png')
     plt.show()
 
     # Find and return the optimal azimuth and tilt in the DataFrame
@@ -100,7 +100,7 @@ def create_poa_bar_chart():
             all_poas.loc[f'{building} - {facade_name}'] = facade['poa_total']
             
     all_poas.plot(kind='bar', ylabel='Total irradiance [$kWh/m^2 year$]')
-    utils.savefig('../figures/question2/poa_all_facades.png')
+    utils.savefig('../output/question2/poa_all_facades.png')
 
 
 # Find the best orientation for the panels on rooftop A and B
