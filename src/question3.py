@@ -1,9 +1,4 @@
 # -*- coding: utf-8 -*-
-"""
-Created on Thu Sep 23 16:35:32 2021
-
-@author: Marita
-"""
 
 import pandas as pd
 import math
@@ -35,23 +30,6 @@ def calculate_capacity():
                 }
 
 
-def find_best_module(facade):
-    """
-    Find the best module for specific facade
-
-    Parameters:
-        facade (obj): Data about the specific facade
-
-    Returns:
-        str: Name of the best module
-    """
-    best_module = None
-    for module in parameters:
-        if not best_module or facade[module]['total_annual_yield_dc'] > facade[best_module]['total_annual_yield_dc']:
-            best_module = module
-    return best_module
-
-
 def calculate_power_output():
     """
     Calculate the DC and AC power output of each facade per module type
@@ -74,6 +52,23 @@ def calculate_power_output():
                 facade[module_type]['total_annual_yield_ac'] = annual_yield_ac
                 facade[module_type]['specific_annual_yield_ac'] = annual_yield_ac / facade['area']
                 facade[module_type]['annual_inverter_efficiency'] = facade[module_type]['total_annual_yield_ac'] / facade[module_type]['total_annual_yield_dc'] 
+
+
+def find_best_module(facade):
+    """
+    Find the best module for specific facade
+
+    Parameters:
+        facade (obj): Data about the specific facade
+
+    Returns:
+        str: Name of the best module
+    """
+    best_module = None
+    for module in parameters:
+        if not best_module or facade[module]['total_annual_yield_dc'] > facade[best_module]['total_annual_yield_dc']:
+            best_module = module
+    return best_module
 
     
 def create_bar_chart_for_all_modules(column, *, filename, ylabel):
