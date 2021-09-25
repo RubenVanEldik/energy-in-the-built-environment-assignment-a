@@ -3,6 +3,7 @@
 import pandas as pd
 import datetime
 import matplotlib.pyplot as plt
+import matplotlib.dates as mdates
 import math
 import json
 import utils
@@ -124,6 +125,7 @@ def create_line_chart_for_day(dates):
             # Create a subplot and plot a line for each subplot
             subplot = axes[index]
             subplot.title.set_text(datetime.datetime.strptime(date, '%Y-%m-%d').strftime("%B %d %Y"))
+            subplot.xaxis.set_major_formatter(mdates.DateFormatter('%H:%M'))
             for facade in power_per_facade:
                 subplot.plot(power_per_facade[facade], label=facade)
             
