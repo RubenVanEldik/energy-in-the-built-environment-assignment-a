@@ -32,6 +32,23 @@ def calculate_possible_capacity():
                 }
 
 
+def find_best_module(facade):
+    """
+    Find the best module for specific facade
+
+    Parameters:
+        facade (obj): Data about the specific facade
+
+    Returns:
+        str: Name of the best module
+    """
+    best_module = None
+    for module in parameters:
+        if not best_module or facade[module]['total_annual_yield_dc'] > facade[best_module]['total_annual_yield_dc']:
+            best_module = module
+    return best_module
+
+
 def calculate_dc_power():
     for building in buildings:
         for facade_name in buildings[building]:
@@ -53,9 +70,9 @@ def calculate_dc_power():
                 facade[module_type]['annual_inverter_efficiency'] = facade[module_type]['total_annual_yield_ac'] / facade[module_type]['total_annual_yield_dc'] 
     
     
-def create_bar_chart_for_facades_and_modules(column, *, filename, ylabel):
+def create_bar_chart_for_all_modules(column, *, filename, ylabel):
     """
-    Create a bar chart with the total POA for each facade
+    Create a bar chart with all facades and modules
     """
     facades_dataframe = pd.DataFrame({}, columns=parameters.columns.to_series())
     for building in buildings:
@@ -67,20 +84,30 @@ def create_bar_chart_for_facades_and_modules(column, *, filename, ylabel):
     utils.savefig(f'../output/question3/{filename}.png')
 
 
+def create_bar_chart_for_best_module(column, *, filename, ylabel):
+    """
+    Create a bar for the best module for each facade
+    """
+    facades_dataframe = pd.Series([], dtype='float64')
+    for building in buildings:
+        for facade_name in buildings[building]:
+            facade = buildings[building][facade_name]
+            best_module = find_best_module(facade)
+            facades_dataframe.loc[f'{building} - {facade_name}'] = facade[best_module][column]
+            
+    facades_dataframe.plot(kind='bar', ylabel=ylabel)
+    utils.savefig(f'../output/question3/{filename}.png')
+
+
 def create_table_pv_systems():
     facades = pd.DataFrame({}, columns=['Facade name', 'Best module', 'Total capacity', 'Tilt', 'Orientation'])
     for building in buildings:
         for facade_name in buildings[building]:
             facade = buildings[building][facade_name]
-            
-            # Find the best module for specific facade
-            best_module = None
-            for module in parameters:
-                if not best_module or facade[module]['total_annual_yield_dc'] > facade[best_module]['total_annual_yield_dc']:
-                    best_module = module
-                
+                            
             # Add the facade info to the facades DataFrame
             name = f'{building} - {facade_name}'
+            best_module = find_best_module(facade)
             total_capacity = facade[best_module]['possible_capacity']
             tilt = facade['tilt']
             orientation = facade['azimuth']
@@ -94,13 +121,14 @@ calculate_possible_capacity()
 calculate_dc_power()
 
 # Create bar charts for the total and specific annual yield
-create_bar_chart_for_facades_and_modules('total_annual_yield_dc', filename='total_annual_yield_dc', ylabel='Total annual yield [$kWh_{dc} / year$]')
-create_bar_chart_for_facades_and_modules('total_annual_yield_ac', filename='total_annual_yield_ac', ylabel='Total annual yield [$kWh_{ac} / year$]')
+create_bar_chart_for_all_modules('total_annual_yield_dc', filename='total_annual_yield_dc', ylabel='Total annual yield [$kWh_{dc} / year$]')
+create_bar_chart_for_all_modules('total_annual_yield_ac', filename='total_annual_yield_ac', ylabel='Total annual yield [$kWh_{ac} / year$]')
 create_table_pv_systems()
 
 # Question 4
-create_bar_chart_for_facades_and_modules('specific_annual_yield_dc', filename='specific_annual_yield_dc', ylabel='Specific annual yield [$kWh_{dc} / m^2 year$]')
-create_bar_chart_for_facades_and_modules('annual_inverter_efficiency', filename='annual_inverter_efficiency', ylabel='Annual inverter efficiency')
+create_bar_chart_for_all_modules('specific_annual_yield_dc', filename='specific_annual_yield_dc', ylabel='Specific annual yield [$kWh_{dc} / m^2 year$]')
+create_bar_chart_for_all_modules('annual_inverter_efficiency', filename='annual_inverter_efficiency', ylabel='Annual inverter efficiency')
+create_bar_chart_for_best_module('total_annual_yield_ac', filename='total_annual_yield_ac_best', ylabel='Total annual yield [$kWh_{ac} / year$]')
 
 # Save the buildings info in a new JSON file
 utils.save_json_file(buildings, filepath='../input/buildings_processed_q3.json')
