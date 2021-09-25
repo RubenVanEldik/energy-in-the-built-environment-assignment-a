@@ -53,7 +53,7 @@ def calculate_dc_power():
                 facade[module_type]['annual_inverter_efficiency'] = facade[module_type]['total_annual_yield_ac'] / facade[module_type]['total_annual_yield_dc'] 
     
     
-def create_annual_yield_bar_chart(column, *, filename, ylabel):
+def create_bar_chart_for_facades_and_modules(column, *, filename, ylabel):
     """
     Create a bar chart with the total POA for each facade
     """
@@ -94,10 +94,13 @@ calculate_possible_capacity()
 calculate_dc_power()
 
 # Create bar charts for the total and specific annual yield
-create_annual_yield_bar_chart('total_annual_yield_dc', filename='total_annual_yield_dc', ylabel='Total annual yield [$kWh_{dc} / year$]')
-create_annual_yield_bar_chart('total_annual_yield_ac', filename='total_annual_yield_ac', ylabel='Total annual yield [$kWh_{ac} / year$]')
-create_annual_yield_bar_chart('specific_annual_yield_dc', filename='specific_annual_yield_dc', ylabel='Specific annual yield [$kWh_{dc} / m^2 year$]')
+create_bar_chart_for_facades_and_modules('total_annual_yield_dc', filename='total_annual_yield_dc', ylabel='Total annual yield [$kWh_{dc} / year$]')
+create_bar_chart_for_facades_and_modules('total_annual_yield_ac', filename='total_annual_yield_ac', ylabel='Total annual yield [$kWh_{ac} / year$]')
 create_table_pv_systems()
+
+# Question 4
+create_bar_chart_for_facades_and_modules('specific_annual_yield_dc', filename='specific_annual_yield_dc', ylabel='Specific annual yield [$kWh_{dc} / m^2 year$]')
+create_bar_chart_for_facades_and_modules('annual_inverter_efficiency', filename='annual_inverter_efficiency', ylabel='Annual inverter efficiency')
 
 # Save the buildings info in a new JSON file
 utils.save_json_file(buildings, filepath='../input/buildings_processed_q3.json')
