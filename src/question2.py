@@ -31,8 +31,9 @@ def calculate_poa(tilt, azimuth, irradiance):
     dni = irradiance.DNI
     ghi = irradiance.GHI
     dhi = irradiance.DHI
-    
-    poa = pvlib.irradiance.get_total_irradiance(tilt, azimuth, solar_zenith, solar_azimuth, dni, ghi, dhi)
+    relative_airmass = pvlib.atmosphere.get_relative_airmass(irradiance.solar_apparent_zenith)
+
+    poa = pvlib.irradiance.get_total_irradiance(tilt, azimuth, solar_zenith, solar_azimuth, dni, ghi, dhi, airmass=relative_airmass)
     return {
         'total': poa.poa_global.sum() / 1000,
         'diffuse': poa.poa_diffuse.sum() / 1000,
