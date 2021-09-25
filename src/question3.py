@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 
 import pandas as pd
+import datetime
+import matplotlib.pyplot as plt
 import math
 import json
 import utils
@@ -100,6 +102,41 @@ def create_bar_chart_for_best_module(column, *, filename, ylabel):
     utils.savefig(f'../output/question3/{filename}.png')
 
 
+def create_line_chart_for_day(dates):
+    for building in buildings:
+        # Create a new chart for each building
+        figure, axes = utils.create_plot_with_subplots(len(dates), 1, xlabel='Time [hour]', ylabel='Average output [$W_{ac}$]', sharex=False)
+
+        # Create a subplot for each day
+        for index, date in enumerate(dates):
+            power_per_facade = {}
+            # Calculate the power output for each facade
+            for facade_name in buildings[building]:
+                # Save some variables
+                facade = buildings[building][facade_name]
+                best_module = find_best_module(facade)
+                irradiance_day = irradiance.loc[date]
+                
+                # Calculate the power output and save it in the power_outputs dictionary
+                ac_power = utils.calculate_power_output(irradiance_day, parameters[best_module], tilt=facade['tilt'], azimuth=facade['azimuth'])['ac']
+                power_per_facade[facade_name] = facade[best_module]['num_panels'] * ac_power
+    
+            # Create a subplot and plot a line for each subplot
+            subplot = axes[index]
+            subplot.title.set_text(datetime.datetime.strptime(date, '%Y-%m-%d').strftime("%B %d %Y"))
+            for facade in power_per_facade:
+                subplot.plot(power_per_facade[facade], label=facade)
+            
+            # Add a legend to only the top subplot
+            if (index == 0):
+                subplot.legend()
+
+        # Save the chart
+        building_name_lowercase = building.lower().replace(' ', '_')
+        utils.savefig(f'../output/question4/power_output_day_{building_name_lowercase}.png')
+        plt.show()
+
+
 def create_table_pv_systems():
     facades = pd.DataFrame({}, columns=['Facade name', 'Best module', 'Total capacity', 'Tilt', 'Orientation'])
     for building in buildings:
@@ -130,6 +167,7 @@ create_table_pv_systems()
 create_bar_chart_for_all_modules('specific_annual_yield_dc', filename='specific_annual_yield_dc', ylabel='Specific annual yield [$kWh_{dc} / m^2 year$]')
 create_bar_chart_for_all_modules('annual_inverter_efficiency', filename='annual_inverter_efficiency', ylabel='Annual inverter efficiency')
 create_bar_chart_for_best_module('total_annual_yield_ac', filename='total_annual_yield_ac_best', ylabel='Total annual yield [$kWh_{ac} / year$]')
+create_line_chart_for_day(['2019-03-01', '2019-06-01', '2019-09-01'])
 
 # Save the buildings info in a new JSON file
 utils.save_json_file(buildings, filepath='../output/question3/buildings.json')
