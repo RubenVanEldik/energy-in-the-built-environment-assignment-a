@@ -14,7 +14,10 @@ irradiance = utils.get_knmi_irradiance()
 parameters = pd.read_excel('../input/Module parameters.xlsx', index_col='Parameters')
 buildings = json.load(open('../input/buildings_processed_q2.json', 'r'))
 
-def calculate_possible_capacity():
+def calculate_capacity():
+    """
+    Calculate the number of panels and total capacity of each facade per module type
+    """
     for building in buildings:
         for facade_name in buildings[building]:
             facade = buildings[building][facade_name]
@@ -28,7 +31,7 @@ def calculate_possible_capacity():
                 num_panels = math.floor(installation_area / module.get('Area'))
                 facade[module_type] = {
                     'num_panels': num_panels,
-                    'possible_capacity': num_panels * module.get('Wp')
+                    'capacity': num_panels * module.get('Wp')
                 }
 
 
@@ -49,7 +52,10 @@ def find_best_module(facade):
     return best_module
 
 
-def calculate_dc_power():
+def calculate_power_output():
+    """
+    Calculate the DC and AC power output of each facade per module type
+    """
     for building in buildings:
         for facade_name in buildings[building]:
             facade = buildings[building][facade_name]
@@ -68,7 +74,7 @@ def calculate_dc_power():
                 facade[module_type]['total_annual_yield_ac'] = annual_yield_ac
                 facade[module_type]['specific_annual_yield_ac'] = annual_yield_ac / facade['area']
                 facade[module_type]['annual_inverter_efficiency'] = facade[module_type]['total_annual_yield_ac'] / facade[module_type]['total_annual_yield_dc'] 
-    
+
     
 def create_bar_chart_for_all_modules(column, *, filename, ylabel):
     """
@@ -117,8 +123,8 @@ def create_table_pv_systems():
     utils.save_text_file(facades.to_latex(), filepath='../output/question3/table_pv_systems.tex')
 
 
-calculate_possible_capacity()
-calculate_dc_power()
+calculate_capacity()
+calculate_power_output()
 
 # Create bar charts for the total and specific annual yield
 create_bar_chart_for_all_modules('total_annual_yield_dc', filename='total_annual_yield_dc', ylabel='Total annual yield [$kWh_{dc} / year$]')
