@@ -109,7 +109,7 @@ def create_table_pv_systems():
             # Add the facade info to the facades DataFrame
             name = f'{building} - {facade_name}'
             best_module = find_best_module(facade)
-            total_capacity = facade[best_module]['possible_capacity']
+            total_capacity = facade[best_module]['capacity']
             tilt = facade['tilt']
             orientation = facade['azimuth']
             facades.loc[name] = [name, best_module, total_capacity, tilt, orientation]
