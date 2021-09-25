@@ -7,7 +7,7 @@ import utils
 
 irradiance = utils.get_knmi_irradiance()
 parameters = pd.read_excel('../input/Module parameters.xlsx', index_col='Parameters')
-buildings = json.load(open('../input/buildings_processed_q2.json', 'r'))
+buildings = json.load(open('../output/question2/buildings.json', 'r'))
 
 def calculate_capacity():
     """
