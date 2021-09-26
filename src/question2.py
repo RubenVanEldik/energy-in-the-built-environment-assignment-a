@@ -9,7 +9,7 @@ import utils
 # Get the building info
 buildings = json.load(open('../input/buildings.json', 'r'))
 
-irradiance = utils.get_knmi_irradiance()
+irradiance = utils.knmi.get_knmi_irradiance()
 
 
 def calculate_poa(tilt, azimuth, irradiance):
@@ -80,7 +80,7 @@ def find_best_orientation(irradiance, *, azimuths, tilts=range(10, 45, 5), plotn
     # Create and save the bar chart
     fig = all_orientations.plot(kind='bar', xlabel='Tilt [deg]', ylabel='Total irradiance [$kWh/m^2 year$]')
     fig.legend(title='Azimuth [deg]', loc=4)
-    utils.savefig(f'../output/question2/{plotname}.png')
+    utils.plots.savefig(f'../output/question2/{plotname}.png')
     plt.show()
 
     # Find and return the optimal azimuth and tilt in the DataFrame
@@ -99,7 +99,7 @@ def create_poa_bar_chart():
             all_poas.loc[f'{building} - {facade_name}'] = facade['poa_total']
             
     all_poas.plot(kind='bar', ylabel='Total irradiance [$kWh/m^2 year$]')
-    utils.savefig('../output/question2/poa_all_facades.png')
+    utils.plots.savefig('../output/question2/poa_all_facades.png')
 
 
 # Find the best orientation for the panels on rooftop A and B
@@ -110,7 +110,7 @@ buildings['House B']['Rooftop'] = { **orientation_rooftop_b, 'area': 1500, 'cove
 
 # Calculate the POA for all facades and save the extended building info to a JSON file
 get_poa_all_facades(buildings, irradiance)
-utils.save_json_file(buildings, filepath='../output/question2/buildings.json')
+utils.files.save_json_file(buildings, filepath='../output/question2/buildings.json')
 
 # Create a bar chart of the POA of all surfaces
 create_poa_bar_chart()
