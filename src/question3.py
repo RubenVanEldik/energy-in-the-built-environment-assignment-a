@@ -106,7 +106,7 @@ def create_bar_chart_for_best_module(column, *, filename, ylabel):
 def create_line_chart_for_day(dates):
     for building in buildings:
         # Create a new chart for each building
-        figure, axes = utils.create_plot_with_subplots(len(dates), 1, xlabel='Time [hour]', ylabel='Average output [$W_{ac}$]', sharex=False)
+        figure, axes = utils.create_plot_with_subplots(len(dates), 1, xlabel='Time [hour]', ylabel='Average output [$kW_{ac}$]', sharex=False)
 
         # Create a subplot for each day
         for index, date in enumerate(dates):
@@ -120,7 +120,7 @@ def create_line_chart_for_day(dates):
                 
                 # Calculate the power output and save it in the power_outputs dictionary
                 ac_power = utils.calculate_power_output(irradiance_day, parameters[best_module], tilt=facade['tilt'], azimuth=facade['azimuth'])['ac']
-                power_per_facade[facade_name] = facade[best_module]['num_panels'] * ac_power
+                power_per_facade[facade_name] = facade[best_module]['num_panels'] * ac_power / 1000
     
             # Create a subplot and plot a line for each subplot
             subplot = axes[index]
