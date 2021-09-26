@@ -36,7 +36,7 @@ def calculate_dni(model, irradiance, *, latitude, longitude):
 
     Parameters:
         model (string): The name of the model, has to be either 'disc', 'dirint', 'dirindex', or 'erbs'
-        irradiance (DataFrame): The latitude
+        irradiance (DataFrame): DataFrame with all weather and irradiance data
 
     Returns:
         Series: The DNI series
@@ -98,6 +98,18 @@ def get_ac_from_dc(p_dc, p_ac0, *, efficiency_nom=0.96):
 
 
 def calculate_power_output(irradiance, module, *, tilt, azimuth):
+    """
+    Calculate DC and AC power output for each irradiance timestep
+
+    Parameters:
+        irradiance (DataFrame): DataFrame with all weather and irradiance data
+        module (object): Parameters of the solar panel module
+        tilt (float or int): Tilt angle of the panel (degrees)
+        azimuth (float or int): Azimuth angle of the panel (degrees)
+
+    Returns:
+        obj: DC and AC power output for each irradiance timestep
+    """
     # Define some variables
     wind = irradiance.wind
     temp_air = irradiance.temp

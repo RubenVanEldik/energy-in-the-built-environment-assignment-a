@@ -2,7 +2,7 @@ import math
 import pandas as pd
 from utils import pv
 
-def get_knmi_data():
+def prepare_data():
     """
     Get and transform the KNMI dataset
 
@@ -38,7 +38,7 @@ def get_knmi_data():
     return file_path
 
 
-def get_knmi_irradiance():
+def get_irradiance():
     """
     Get the KNMI data and calculate the irradiance for each timestep
 
@@ -49,7 +49,7 @@ def get_knmi_irradiance():
     longitude = 5.752
 
     # Get the irradiance data from the KNMI data
-    filename = get_knmi_data()
+    filename = prepare_data()
     irradiance = pv.get_irradiance(filename, latitude=latitude, longitude=longitude, index_col='datetime', temp_col='temp')
     
     # Get the DNI and DHI

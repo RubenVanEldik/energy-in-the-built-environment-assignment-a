@@ -27,9 +27,6 @@ def print_object(dict, *, name='', uppercase=False):
         dict (dict): Dictionary that should be printed
         name (string): Name that should appear before the first key/value of the dictionary
         uppercase (bool): Whether or not the keys should be printed in capital letters
-
-    Returns:
-        null
     """
     string = name.ljust(10) if name != '' else ''
     for key in dict:
