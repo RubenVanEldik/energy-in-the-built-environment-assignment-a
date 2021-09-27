@@ -220,8 +220,8 @@ The calculations for question 4 are already done during question3, so only the f
 
 # Import data
 irradiance = utils.knmi.get_irradiance()
-buildings = json.load(open('../output/question2/buildings.json', 'r'))
 parameters = pd.read_excel('../input/Module parameters.xlsx', index_col='Parameters')
+buildings = utils.files.open_json_file('../input/buildings.json')
 
 # Calculate the capacity and power output per facade
 buildings = calculate_capacity(buildings)

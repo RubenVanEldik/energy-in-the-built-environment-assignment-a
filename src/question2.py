@@ -118,7 +118,7 @@ This is done in four steps:
 """
 
 # Get the building and KNMI irradiance data
-buildings = json.load(open('../input/buildings.json', 'r'))
+buildings = utils.files.open_json_file('../input/buildings.json')
 irradiance = utils.knmi.get_irradiance()
 
 # Find the best orientation for the panels on rooftop A and B

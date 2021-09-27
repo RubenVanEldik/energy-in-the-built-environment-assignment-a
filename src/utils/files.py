@@ -1,6 +1,16 @@
 import json
 
 
+def open_json_file(filepath):
+    """
+    Open and parse a JSON file.
+
+    Parameters:
+        filepath (string): Path of the JSON file that should be opened
+    """
+    with open(filepath, 'r') as file:
+        return json.load(file)
+
 def save_json_file(obj, *, filepath):
     """
     Save a object or list as a JSON file
