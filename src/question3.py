@@ -1,10 +1,13 @@
-import pandas as pd
 import datetime
-import matplotlib.pyplot as plt
-import matplotlib.dates as mdates
-import math
 import json
+import math
+
+import matplotlib.dates as mdates
+import matplotlib.pyplot as plt
+import pandas as pd
+
 import utils
+
 
 def calculate_capacity(buildings):
     """

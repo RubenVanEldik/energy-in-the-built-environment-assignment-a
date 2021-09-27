@@ -1,6 +1,9 @@
 import math
+
 import pandas as pd
+
 from utils import pv
+
 
 def prepare_data():
     """

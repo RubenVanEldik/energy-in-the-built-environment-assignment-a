@@ -1,5 +1,6 @@
 import matplotlib.pyplot as plt
 
+
 def create_plot_with_subplots(rows, columns, *, xlabel, ylabel, sharex=True, sharey=True):
     """
     Create a plot with rows x columns subplots and labels on the outer axes

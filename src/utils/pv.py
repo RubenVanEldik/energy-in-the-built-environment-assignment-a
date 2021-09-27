@@ -1,6 +1,7 @@
 import pandas as pd
 import pvlib
 
+
 def get_irradiance(filename, *, latitude, longitude, index_col='timestamp', temp_col):
     """
     Get the irradiance and position of the sun and merge this with the original DataFrame

@@ -1,5 +1,6 @@
 from scipy import stats
 
+
 def compare_series(series_a, series_b):
     """
     Calculate the RMSE, MBE, and MAE for two data series

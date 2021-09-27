@@ -1,5 +1,6 @@
 import json
 
+
 def save_json_file(obj, *, filepath):
     """
     Save a object or list as a JSON file
