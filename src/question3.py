@@ -52,7 +52,7 @@ def calculate_capacity(buildings):
                 num_panels = math.floor(installation_area / module.get('Area'))
                 facade[module_type] = {
                     'num_panels': num_panels,
-                    'capacity': num_panels * module.get('Wp'),
+                    'capacity': num_panels * module.get('Wp') / 1000,
                 }
     return buildings
 
