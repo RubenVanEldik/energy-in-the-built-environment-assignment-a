@@ -20,6 +20,7 @@ def prepare_data():
     knmi.date = knmi.date.astype(str)
     knmi.HH = knmi.HH.apply(lambda hour: str(hour).zfill(2))
     knmi.HH = knmi.HH.replace('24', '00')
+    knmi['HH'] = ((knmi.HH.apply(int) - 1) % 24).apply(str)
     knmi['datetime'] = knmi.date + knmi.HH + '00'
     knmi['datetime'] = pd.to_datetime(knmi.datetime, format='%Y%m%d%H%M')
 
