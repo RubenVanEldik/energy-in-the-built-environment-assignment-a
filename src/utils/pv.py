@@ -68,7 +68,7 @@ def calculate_dni(model, irradiance, *, latitude, longitude):
     raise Exception('Invalid GHI-DNI model type')
 
 
-def get_ac_from_dc(p_dc, p_ac0, *, efficiency_nom=0.96):
+def get_ac_from_dc(power_dc, nominal_power_ac, *, efficiency_nom=0.96):
     """
     Calculate AC power output of the inverter for a specific DC power.
 
@@ -80,22 +80,22 @@ def get_ac_from_dc(p_dc, p_ac0, *, efficiency_nom=0.96):
         float: The efficiency of the inverter
     """
     # Return 0 if the DC power is 0
-    if p_dc == 0:
+    if power_dc == 0:
         return 0
 
-    # Calculate the rated DC power and zeta
-    p_dc0 = p_ac0 / efficiency_nom
-    zeta = p_dc / p_dc0
+    # Calculate the rated DC power
+    nominal_power_dc = nominal_power_ac / efficiency_nom
 
     # Return the rated power of the inverter if the DC power is larger or equal to the rated DC power
-    if p_dc >= p_dc0:
-        return p_ac0
+    if power_dc >= nominal_power_dc:
+        return nominal_power_ac
 
     # Calculate the efficiency
+    zeta = power_dc / nominal_power_dc
     efficiency = -0.0162 * zeta - (0.0059 / zeta) + 0.9858
 
     # Return the efficiency of the inverter times the DC power
-    return efficiency * p_dc
+    return efficiency * power_dc
 
 
 def calculate_power_output(irradiance, module, *, tilt, azimuth):
