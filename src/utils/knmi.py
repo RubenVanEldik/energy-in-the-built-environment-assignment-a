@@ -58,5 +58,5 @@ def get_irradiance():
 
     # Get the DNI and DHI
     irradiance['DNI'] = pv.calculate_dni('dirindex', irradiance, latitude=latitude, longitude=longitude)
-    irradiance['DHI'] = irradiance.GHI - irradiance.DNI * irradiance.solar_zenith.apply(math.cos)
+    irradiance['DHI'] = irradiance.GHI - irradiance.DNI * irradiance.solar_zenith.apply(math.radians).apply(math.cos)
     return irradiance
