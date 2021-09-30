@@ -252,22 +252,22 @@ buildings = calculate_capacity(buildings)
 buildings = calculate_power_output(buildings)
 
 # Create bar charts for the total and specific annual yield
-create_bar_chart_for_all_modules(
-    'total_annual_yield_dc', scale=0.001, filename='total_annual_yield_dc', ylabel='Total annual yield [$MWh_{dc} / year$]')
-create_bar_chart_for_all_modules(
-    'total_annual_yield_ac', scale=0.001, filename='total_annual_yield_ac', ylabel='Total annual yield [$MWh_{ac} / year$]')
-create_table_pv_systems()
+# create_bar_chart_for_all_modules(
+#     'total_annual_yield_dc', scale=0.001, filename='total_annual_yield_dc', ylabel='Total annual yield [$MWh_{dc} / year$]')
+# create_bar_chart_for_all_modules(
+#     'total_annual_yield_ac', scale=0.001, filename='total_annual_yield_ac', ylabel='Total annual yield [$MWh_{ac} / year$]')
+# create_table_pv_systems()
 
 # Question 4
 create_bar_chart_for_best_module(
     'total_annual_yield_ac', scale=0.0001, filename='total_annual_yield_ac_best', ylabel='Total annual yield [$MWh_{ac} / year$]')
 create_bar_chart_for_all_modules('specific_annual_yield_dc', filename='specific_annual_yield_dc',
-                                 ylabel='Specific annual yield [$MWh_{dc} / m^2 year$]')
+                                 ylabel='Specific annual yield [$kWh_{dc} / m^2 year$]')
 create_bar_chart_for_all_modules(
     'annual_inverter_efficiency', filename='annual_inverter_efficiency', ylabel='Annual inverter efficiency')
 create_bar_chart_per_building()
 create_line_chart_for_day(['2019-03-01', '2019-06-01', '2019-09-01'])
 
 # Save the buildings info in a new JSON file
-utils.files.save_json_file(
-    buildings, filepath='../output/question3/buildings.json')
+# utils.files.save_json_file(
+#     buildings, filepath='../output/question3/buildings.json')
