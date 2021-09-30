@@ -109,7 +109,7 @@ def find_best_module(facade):
     return best_module
 
 
-def create_bar_chart_for_all_modules(column, *, filename, ylabel):
+def create_bar_chart_for_all_modules(column, *, scale=1, filename, ylabel):
     """
     Create a bar chart with all facades and modules.
 
@@ -123,13 +123,13 @@ def create_bar_chart_for_all_modules(column, *, filename, ylabel):
     for building_name, building in buildings.items():
         for facade_name, facade in building.items():
             facades_dataframe.loc[f'{building_name} - {facade_name}'] = list(
-                map(lambda module_name: facade[module_name][column], modules))
+                map(lambda module_name: facade[module_name][column] * scale, modules))
 
     facades_dataframe.plot(kind='bar', ylabel=ylabel)
     utils.plots.savefig(f'../output/question3/{filename}.png')
 
 
-def create_bar_chart_for_best_module(column, *, filename, ylabel):
+def create_bar_chart_for_best_module(column, *, scale=1, filename, ylabel):
     """
     Create a bar chart for the best module for each facade.
 
@@ -142,7 +142,7 @@ def create_bar_chart_for_best_module(column, *, filename, ylabel):
     for building_name, building in buildings.items():
         for facade_name, facade in building.items():
             best_module = find_best_module(facade)
-            facades_dataframe.loc[f'{building_name} - {facade_name}'] = facade[best_module][column]
+            facades_dataframe.loc[f'{building_name} - {facade_name}'] = facade[best_module][column] * scale
 
     facades_dataframe.plot(kind='bar', ylabel=ylabel)
     utils.plots.savefig(f'../output/question3/{filename}.png')
@@ -253,16 +253,16 @@ buildings = calculate_power_output(buildings)
 
 # Create bar charts for the total and specific annual yield
 create_bar_chart_for_all_modules(
-    'total_annual_yield_dc', filename='total_annual_yield_dc', ylabel='Total annual yield [$kWh_{dc} / year$]')
+    'total_annual_yield_dc', scale=0.001, filename='total_annual_yield_dc', ylabel='Total annual yield [$MWh_{dc} / year$]')
 create_bar_chart_for_all_modules(
-    'total_annual_yield_ac', filename='total_annual_yield_ac', ylabel='Total annual yield [$kWh_{ac} / year$]')
+    'total_annual_yield_ac', scale=0.001, filename='total_annual_yield_ac', ylabel='Total annual yield [$MWh_{ac} / year$]')
 create_table_pv_systems()
 
 # Question 4
 create_bar_chart_for_best_module(
-    'total_annual_yield_ac', filename='total_annual_yield_ac_best', ylabel='Total annual yield [$kWh_{ac} / year$]')
+    'total_annual_yield_ac', scale=0.0001, filename='total_annual_yield_ac_best', ylabel='Total annual yield [$MWh_{ac} / year$]')
 create_bar_chart_for_all_modules('specific_annual_yield_dc', filename='specific_annual_yield_dc',
-                                 ylabel='Specific annual yield [$kWh_{dc} / m^2 year$]')
+                                 ylabel='Specific annual yield [$MWh_{dc} / m^2 year$]')
 create_bar_chart_for_all_modules(
     'annual_inverter_efficiency', filename='annual_inverter_efficiency', ylabel='Annual inverter efficiency')
 create_bar_chart_per_building()
