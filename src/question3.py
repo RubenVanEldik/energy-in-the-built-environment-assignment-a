@@ -148,6 +148,29 @@ def create_bar_chart_for_best_module(column, *, filename, ylabel):
     utils.plots.savefig(f'../output/question3/{filename}.png')
 
 
+def create_bar_chart_per_building():
+    """
+    Create a bar chart with AC output per building.s
+
+    Parameters:
+        column (str): Name of column that should be plotted
+        filename (str): Name under which file should be saved
+        ylabe (str): Name of the vertical axis
+    """
+    buildings_dataframe = pd.Series([], dtype='float64')
+    for building_name, building in buildings.items():
+        annual_yield_building = 0
+        for facade_name, facade in building.items():
+            best_module = find_best_module(facade)
+            annual_yield_building += facade[best_module]['total_annual_yield_ac']
+        buildings_dataframe.loc[f'{building_name}'] = annual_yield_building / 1000
+
+    buildings_dataframe.plot(
+        kind='bar', ylabel='Total annual yield [$MWh_{ac} / year$]')
+    utils.plots.savefig(
+        f'../output/question4/total_annual_yield_ac_building.png')
+
+
 def create_line_chart_for_day(dates):
     """
     Create a line chart for the AC power output for the given dates.
@@ -210,7 +233,8 @@ def create_table_pv_systems():
             total_capacity = facade[best_module]['capacity']
             tilt = facade['tilt']
             orientation = facade['azimuth']
-            facades.loc[name] = [name, best_module, total_capacity, tilt, orientation]
+            facades.loc[name] = [name, best_module,
+                                 total_capacity, tilt, orientation]
 
     # Create a LaTeX table from the DataFrame
     utils.files.save_text_file(
@@ -241,6 +265,7 @@ create_bar_chart_for_all_modules('specific_annual_yield_dc', filename='specific_
                                  ylabel='Specific annual yield [$kWh_{dc} / m^2 year$]')
 create_bar_chart_for_all_modules(
     'annual_inverter_efficiency', filename='annual_inverter_efficiency', ylabel='Annual inverter efficiency')
+create_bar_chart_per_building()
 create_line_chart_for_day(['2019-03-01', '2019-06-01', '2019-09-01'])
 
 # Save the buildings info in a new JSON file
