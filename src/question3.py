@@ -84,9 +84,9 @@ def calculate_power_output(buildings):
                 # Add the annual yield and efficiency to the tab
                 facade[module_type].update({
                     'total_annual_yield_dc': annual_yield_dc,
-                    'specific_annual_yield_dc': annual_yield_dc / facade['area'],
+                    'specific_annual_yield_dc': annual_yield_dc / (facade['area'] * facade['coverage']),
                     'total_annual_yield_ac': annual_yield_ac,
-                    'specific_annual_yield_ac': annual_yield_ac / facade['area'],
+                    'specific_annual_yield_ac': annual_yield_ac / (facade['area'] * facade['coverage']),
                     'annual_inverter_efficiency': inverter_efficiency,
                 })
     return buildings
