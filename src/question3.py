@@ -13,7 +13,7 @@ Question 3 is answered in three steps:
     a. Create a bar chart with the total annual yield DC
     b. Create a bar chart with the total annual yield AC
     c. Create a LaTeX table for all facades with the best module, capacity, tilt, and orientation
-    
+
 The calculations for question 4 are already done during question3, so only the figures have to be created
 1. Create a bar chart for the total annual AC yield
 2. Create a bar chart for the specific annual AC yield
@@ -266,7 +266,7 @@ create_bar_chart_for_all_modules('specific_annual_yield_dc', filename='specific_
 create_bar_chart_for_all_modules(
     'annual_inverter_efficiency', filename='annual_inverter_efficiency', ylabel='Annual inverter efficiency')
 create_bar_chart_per_building()
-create_line_chart_for_day(['2019-03-01', '2019-06-01', '2019-09-01'])
+create_line_chart_for_day(['2019-01-01', '2019-07-01', '2019-10-01'])
 
 # Save the buildings info in a new JSON file
 # utils.files.save_json_file(
