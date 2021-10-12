@@ -65,15 +65,19 @@ def find_best_orientation(irradiance, *, azimuths, tilts, plotname):
     for tilt in tilts:
         all_orientations.loc[tilt] = list(map(lambda azimuth: calculate_poa(tilt, azimuth, irradiance)['total'], azimuths))
 
-    # Create and save the bar chart
-    fig = all_orientations.plot(kind='bar', xlabel='Tilt [deg]', ylabel='Total irradiance [$kWh/m^2 year$]')
-    fig.legend(title='Azimuth [deg]', loc=4)
-    utils.plots.savefig(f'../output/question2/{plotname}.png')
-    plt.show()
-
     # Find and return the optimal azimuth and tilt in the DataFrame
     optimal_azimuth = all_orientations.max().idxmax()
     optimal_tilt = all_orientations[optimal_azimuth].idxmax()
+
+    # Create and save the bar chart
+    fig = all_orientations.plot(kind='bar', xlabel='Tilt [deg]', ylabel='Total irradiance [$kWh/m^2 year$]')
+    fig.legend(title='Azimuth [deg]', loc=4)
+
+    max_value = all_orientations.loc[optimal_tilt, optimal_azimuth]
+    fig.set_ylim([1100, math.ceil(max_value / 20) * 20])
+    utils.plots.savefig(f'../output/question2/{plotname}.png')
+    plt.show()
+
     return {'tilt': int(optimal_tilt), 'azimuth': int(optimal_azimuth)}
 
 
