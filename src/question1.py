@@ -29,13 +29,16 @@ def create_measured_vs_calculated_scatterplot(irradiance):
     """
     xlabel = 'Measured DNI [$W/m^2$]'
     ylabel = 'Computed DNI [$W/m^2$]'
+    colors = ('#915a8d', '#91723c', '#85ab7b', '#aa3026')
     figure, axes = utils.plots.create_plot_with_subplots(
         2, 2, xlabel=xlabel, ylabel=ylabel)
 
     for index, model in enumerate(MODELS):
         dotsize = 0.00005
+        color = colors[index]
         subplot = axes[index // 2][index % 2]
-        subplot.scatter(irradiance.DNI, irradiance[f'dni_{model}'], s=dotsize)
+        subplot.scatter(
+            irradiance.DNI, irradiance[f'dni_{model}'], s=dotsize, c=color)
         subplot.title.set_text(model.upper())
 
         # Add a trend line
@@ -52,6 +55,7 @@ def create_elevation_vs_error_scatterplot(irradiance):
     Parameters:
         irradiance (DataFrame): DataFrame with the irradiance
     """
+    colors = ('#915a8d', '#91723c', '#85ab7b', '#aa3026')
     figure, axes = utils.plots.create_plot_with_subplots(
         2, 2, xlabel='Solar elevation [deg]', ylabel='DNI error [$W/m^2$]')
 
@@ -61,8 +65,10 @@ def create_elevation_vs_error_scatterplot(irradiance):
         dni_error = dni_calculated - dni_measured
 
         dotsize = 0.00005
+        color = colors[index]
         subplot = axes[index // 2][index % 2]
-        subplot.scatter(irradiance['solar_elevation'], dni_error, s=dotsize)
+        subplot.scatter(irradiance['solar_elevation'],
+                        dni_error, s=dotsize, c=color)
         subplot.title.set_text(model.upper())
 
     utils.plots.savefig(
