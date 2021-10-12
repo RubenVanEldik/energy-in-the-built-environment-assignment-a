@@ -14,8 +14,8 @@ def compare_series(series_a, series_b):
     """
     return {
         'rmse': ((series_a - series_b) ** 2).mean() ** 0.5,
-        'mbe': (series_a - series_b).mean(),
-        'mae': abs(series_a - series_b).mean(),
+        'mbe': (series_b - series_a).mean(),
+        'mae': abs(series_b - series_a).mean(),
         'rsqr': stats.linregress(series_a, series_b).rvalue ** 2,
     }
 
