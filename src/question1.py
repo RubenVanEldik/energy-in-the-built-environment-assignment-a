@@ -82,6 +82,7 @@ def create_histogram(irradiance):
     Parameters:
         irradiance (DataFrame): DataFrame with the irradiance
     """
+    colors = ('#915a8d', '#91723c', '#85ab7b', '#aa3026')
     figure, axes = utils.plots.create_plot_with_subplots(
         2, 2, xlabel='DNI error [$W/m^2$]', ylabel='Occurrances [#]')
 
@@ -92,9 +93,10 @@ def create_histogram(irradiance):
         dni_measured = irradiance.DNI
         dni_calculated = irradiance[f'dni_{model}']
         dni_error = dni_calculated - dni_measured
+        color = colors[index]
 
         # Create a subplot and set the model as title
-        subplot.hist(dni_error, log=True, bins=100)
+        subplot.hist(dni_error, log=True, bins=100, color=color)
         subplot.title.set_text(model.upper())
     utils.plots.savefig('../output/question1/histogram.png')
 
