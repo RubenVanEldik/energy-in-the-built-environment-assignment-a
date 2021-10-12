@@ -14,10 +14,13 @@ This is done in four steps:
 """
 
 import pandas as pd
+import math
 import pvlib
 from matplotlib import pyplot as plt
 
 import utils
+
+COLORS = ['#aa3026', '#91723c', '#915a8d', '#85ab7b']
 
 
 def calculate_poa(tilt, azimuth, irradiance):
@@ -38,9 +41,11 @@ def calculate_poa(tilt, azimuth, irradiance):
     dni = irradiance.DNI
     ghi = irradiance.GHI
     dhi = irradiance.DHI
-    relative_airmass = pvlib.atmosphere.get_relative_airmass(irradiance.solar_apparent_zenith)
+    relative_airmass = pvlib.atmosphere.get_relative_airmass(
+        irradiance.solar_apparent_zenith)
 
-    poa = pvlib.irradiance.get_total_irradiance(tilt, azimuth, solar_zenith, solar_azimuth, dni, ghi, dhi, airmass=relative_airmass)
+    poa = pvlib.irradiance.get_total_irradiance(
+        tilt, azimuth, solar_zenith, solar_azimuth, dni, ghi, dhi, airmass=relative_airmass)
     return {
         'total': poa.poa_global.sum() / 1000,
         'diffuse': poa.poa_diffuse.sum() / 1000,
@@ -63,14 +68,16 @@ def find_best_orientation(irradiance, *, azimuths, tilts, plotname):
 
     # Loop over all the tilts and add a row with the total POA for each azimuth
     for tilt in tilts:
-        all_orientations.loc[tilt] = list(map(lambda azimuth: calculate_poa(tilt, azimuth, irradiance)['total'], azimuths))
+        all_orientations.loc[tilt] = list(map(lambda azimuth: calculate_poa(
+            tilt, azimuth, irradiance)['total'], azimuths))
 
     # Find and return the optimal azimuth and tilt in the DataFrame
     optimal_azimuth = all_orientations.max().idxmax()
     optimal_tilt = all_orientations[optimal_azimuth].idxmax()
 
     # Create and save the bar chart
-    fig = all_orientations.plot(kind='bar', xlabel='Tilt [deg]', ylabel='Total irradiance [$kWh/m^2 year$]')
+    fig = all_orientations.plot(
+        kind='bar', xlabel='Tilt [deg]', ylabel='Total irradiance [$kWh/m^2 year$]', color=COLORS)
     fig.legend(title='Azimuth [deg]', loc=4)
 
     max_value = all_orientations.loc[optimal_tilt, optimal_azimuth]
@@ -123,14 +130,19 @@ buildings = utils.files.open_json_file('../input/buildings.json')
 irradiance = utils.knmi.get_irradiance()
 
 # Find the best orientation for the panels on rooftop A and B
-orientation_rooftop_b = find_best_orientation(irradiance, plotname='rooftop_b', tilts=range(10, 45, 5), azimuths=[180])
-orientation_rooftop_a = find_best_orientation(irradiance, plotname='rooftop_a', tilts=range(10, 45, 5), azimuths=[135, 225])
-buildings['House A']['Rooftop'] = {**orientation_rooftop_a, 'area': 3000, 'coverage': 0.5}
-buildings['House B']['Rooftop'] = {**orientation_rooftop_b, 'area': 1500, 'coverage': 0.5}
+orientation_rooftop_b = find_best_orientation(
+    irradiance, plotname='rooftop_b', tilts=range(10, 45, 5), azimuths=[180])
+orientation_rooftop_a = find_best_orientation(
+    irradiance, plotname='rooftop_a', tilts=range(10, 45, 5), azimuths=[135, 225])
+buildings['House A']['Rooftop'] = {
+    **orientation_rooftop_a, 'area': 3000, 'coverage': 0.5}
+buildings['House B']['Rooftop'] = {
+    **orientation_rooftop_b, 'area': 1500, 'coverage': 0.5}
 
 # Calculate the POA for all facades and save the extended building info to a JSON file
 buildings = get_poa_all_facades(buildings, irradiance)
-utils.files.save_json_file(buildings, filepath='../output/question2/buildings.json')
+utils.files.save_json_file(
+    buildings, filepath='../output/question2/buildings.json')
 
 # Create a bar chart of the POA of all surfaces
 create_poa_bar_chart()

@@ -30,6 +30,8 @@ import pandas as pd
 
 import utils
 
+COLORS = ['#aa3026', '#85ab7b', '#915a8d', '#91723c']
+
 
 def calculate_capacity(buildings):
     """
@@ -125,7 +127,7 @@ def create_bar_chart_for_all_modules(column, *, scale=1, filename, ylabel):
             facades_dataframe.loc[f'{building_name} - {facade_name}'] = list(
                 map(lambda module_name: facade[module_name][column] * scale, modules))
 
-    facades_dataframe.plot(kind='bar', ylabel=ylabel)
+    facades_dataframe.plot(kind='bar', ylabel=ylabel, color=COLORS)
     utils.plots.savefig(f'../output/question3/{filename}.png')
 
 
@@ -166,7 +168,7 @@ def create_bar_chart_per_building():
         buildings_dataframe.loc[f'{building_name}'] = annual_yield_building / 1000
 
     buildings_dataframe.plot(
-        kind='bar', ylabel='Total annual yield [$MWh_{ac} / year$]')
+        kind='bar', ylabel='Total annual yield [$MWh_{ac} / year$]', color=COLORS[0])
     utils.plots.savefig(
         f'../output/question4/total_annual_yield_ac_building.png')
 
@@ -203,8 +205,10 @@ def create_line_chart_for_day(dates):
             subplot.title.set_text(datetime.datetime.strptime(
                 date, '%Y-%m-%d').strftime('%B %d %Y'))
             subplot.xaxis.set_major_formatter(mdates.DateFormatter('%H:%M'))
-            for facade_name, facade in power_per_facade.items():
-                subplot.plot(facade, label=facade_name)
+            for facade_index, facade_name in enumerate(power_per_facade):
+                facade = power_per_facade[facade_name]
+                subplot.plot(facade, label=facade_name,
+                             color=COLORS[facade_index])
 
             # Add a legend to only the top subplot
             if (index == 0):
