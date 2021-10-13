@@ -173,13 +173,24 @@ def create_bar_chart_per_building():
         f'../output/question4/total_annual_yield_ac_building.png')
 
 
-def create_line_chart_for_day(dates):
+def find_best_day(start_day, end_day):
+    # print(irradiance.resample('1D').mean())
+    irradiance_days = irradiance.loc[start_day: end_day].resample('1D').mean()
+    return irradiance_days.GHI.idxmax().strftime('%Y-%m-%d')
+
+
+def create_line_chart_for_day():
     """
     Create a line chart for the AC power output for the given dates.
 
     Parameters:
         dates (list): List of dates that should be plotted
     """
+    spring_day = find_best_day('2019-03-01', '2019-04-30')
+    summer_day = find_best_day('2019-06-01', '2019-08-31')
+    fall_day = find_best_day('2019-10-01', '2019-11-30')
+
+    dates = (spring_day, summer_day, fall_day)
     for building_name, building in buildings.items():
         # Create a new chart for each building
         figure, axes = utils.plots.create_plot_with_subplots(len(
@@ -270,7 +281,7 @@ create_bar_chart_for_all_modules('specific_annual_yield_dc', filename='specific_
 create_bar_chart_for_all_modules(
     'annual_inverter_efficiency', filename='annual_inverter_efficiency', ylabel='Annual inverter efficiency')
 create_bar_chart_per_building()
-create_line_chart_for_day(['2019-01-01', '2019-07-01', '2019-10-01'])
+create_line_chart_for_day()
 
 # Save the buildings info in a new JSON file
 # utils.files.save_json_file(
