@@ -275,7 +275,7 @@ buildings = calculate_power_output(buildings)
 
 # Question 4
 create_bar_chart_for_best_module(
-    'total_annual_yield_ac', scale=0.0001, filename='total_annual_yield_ac_best', ylabel='Total annual yield [$MWh_{ac} / year$]')
+    'total_annual_yield_ac', scale=0.001, filename='total_annual_yield_ac_best', ylabel='Total annual yield [$MWh_{ac} / year$]')
 create_bar_chart_for_all_modules('specific_annual_yield_dc', filename='specific_annual_yield_dc',
                                  ylabel='Specific annual yield [$kWh_{dc} / m^2 year$]')
 create_bar_chart_for_all_modules(
