@@ -270,7 +270,7 @@ create_bar_chart_for_all_modules('specific_annual_yield_dc', filename='specific_
 create_bar_chart_for_all_modules(
     'annual_inverter_efficiency', filename='annual_inverter_efficiency', ylabel='Annual inverter efficiency')
 create_bar_chart_per_building()
-create_line_chart_for_day(['2019-01-01', '2019-07-01', '2019-10-01'])
+create_line_chart_for_day(['2019-04-21', '2019-06-29', '2019-10-02'])
 
 # Save the buildings info in a new JSON file
 # utils.files.save_json_file(
